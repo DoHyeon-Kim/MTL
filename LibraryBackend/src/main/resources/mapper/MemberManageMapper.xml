@@ -1,0 +1,53 @@
+<?xml version="1.0" encoding="UTF-8"?>
+	
+	<!DOCTYPE mapper
+	PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+	"https://mybatis.org/dtd/mybatis-3-mapper.dtd">
+
+<mapper
+	namespace="com.library.usermanage.mapper.UserManageMapper">
+
+	<!--図書登録 -->
+	<insert id="insertbook"
+		parameterType="com.library.usermanage.dto.UserDTO">
+
+		INSERT INTO Book
+		(
+		TITLE
+		, CONTENT
+		, MEMBER_ID
+		)
+		VALUES
+		(
+		#{title}
+		, #{content}
+		, #{memberId}
+		)
+
+	</insert>
+	<!--図書削除 -->
+
+
+	<!--図書修正 -->
+
+	<!--ユーザーリスト -->
+	<select id="memberList" parameterType="String"
+		resultType="com.library.usermanage.dto.UserLoanStatusDTO">
+
+		Select m.memberId
+		, mi.nameH
+		, (select count(*) from loan l
+		where m.memberNo = l.memberNo and
+		l.requeststate in ('2','3','4')) as
+		loanCount
+		, (select count(*) from loan l where m.memberNo = l.memberNo
+		and
+		l.requeststate = '5') as entiCount
+		from member m,
+		memberinfo mi
+		where
+		m.memberId = #{memberId}
+	</select>
+
+
+</mapper>

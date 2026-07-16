@@ -1,0 +1,58 @@
+<?xml version="1.0" encoding="UTF-8"?>
+	
+	<!DOCTYPE mapper
+	PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+	"https://mybatis.org/dtd/mybatis-3-mapper.dtd">
+
+<mapper namespace="com.library.book.mapper.BookMapper">
+
+<!--図書登録-->
+<insert id="createBook"
+		parameterType="com.library.book.dto.BookDTO">
+
+		INSERT INTO book
+		(
+		 bookImg
+		, bookTitle
+		, Writer
+		, Publisher
+		, Category
+		, bookContent
+		, publicationDate
+		, registrationDate
+		)
+		VALUES
+		(
+		 #{bookImg}
+		, #{bookTitle}
+		, #{Writer}
+		, #{Publisher}
+		, #{Category}
+		, #{bookContent}
+		, #{publicationDate}
+		, #{registrationDate}
+		)
+
+	</insert>
+<!--図書削除-->
+
+
+<!--図書修正-->
+
+<!--図書リスト-->
+<select id="bookList"
+parameterType="String"
+	resultType="com.library.book.dto.BookDTO">
+	
+	SELECT 
+	    bookNumber
+	    , bookTitle
+		, writer
+    	, publicationDate
+	FROM 
+		book
+	WHERE
+		bookTitle = #{title}
+</select>
+
+</mapper>
