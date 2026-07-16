@@ -1,19 +1,15 @@
 import { createRouter, createWebHistory } from 'vue-router'
 
+import member from './member'
+import loan from './loan'
+
 const router = createRouter({
   history: createWebHistory(import.meta.env.BASE_URL),
   routes: [
-       {
-      path: '/',
-      component: () => import('@/views/MainHomeView.vue'),
-      meta: {
-        showMainHeader: true,
-        showMainSidebar: true,
-        showMainFooter: true
-      }
-    },
-  ],
+    ...member,
+    ...loan,
 
+  ],
 })
 
 export default router

@@ -1,0 +1,28 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+
+<!DOCTYPE mapper 
+PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+"https://mybatis.org/dtd/mybatis-3-mapper.dtd">
+
+<mapper namespace="com.library.cart.mapper.CartMapper">
+
+<select id="selectCartByMember" resultType="com.library.cart.dto.CartDTO">
+    SELECT c.cartItemNo,
+           c.memberNo,
+           c.bookNumber,
+           b.bookImg,
+           b.bookTitle,
+           b.Writer AS writer
+    FROM cart c
+    JOIN book b ON c.bookNumber = b.bookNumber
+    WHERE c.memberNo = #{memberNo}
+</select>
+
+<delete id="deleteCart"
+	parameterType="int">
+	DELETE 
+	FROM cart
+	WHERE cartItemNo = #{cartItemNo}
+</delete>
+
+</mapper>
