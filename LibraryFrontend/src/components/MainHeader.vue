@@ -118,6 +118,8 @@
                                                 <li><a href="blog-detail.html">Blog Detail</a></li>
                                             </ul>
                                         </li>
+                                        <li><router-link to="/announcement">おしらせ</router-link></li>
+                                        <li><router-link to="/qanda">Q&amp;A</router-link></li>
                                         <li><a href="services.html">Services</a></li>
                                         <li><a href="contact.html">Contact</a></li>
                                     </ul>
@@ -173,6 +175,8 @@
                                             <li><a href="blog-detail.html">Blog Detail</a></li>
                                         </ul>
                                     </li>
+                                    <li><router-link to="/announcement">おしらせ</router-link></li>
+                                    <li><router-link to="/qanda">Q&amp;A</router-link></li>
                                     <li><a href="services.html">Services</a></li>
                                     <li><a href="contact.html">Contact</a></li>
                                 </ul>
