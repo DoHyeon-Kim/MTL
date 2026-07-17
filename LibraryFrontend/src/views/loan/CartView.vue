@@ -114,6 +114,7 @@ function selectAll() {
                       class="book-checkbox"
                       :value="item.cartItemNo"
                       v-model="checkedItems"
+                      style="margin-right: 15px;"
                     />
                     <span class="book-cover">
                       <img :src="PLACEHOLDER_IMAGE" :alt="item.bookTitle" />
@@ -194,7 +195,7 @@ function selectAll() {
 .cart-empty {
   padding: 60px 0;
   text-align: center;
-  color: #6b6b6b;
+  color: #000000;
   font-size: 16px;
 }
 
@@ -208,24 +209,11 @@ function selectAll() {
   padding: 15px;
   text-align: left;
   font-weight: 600;
-  border-bottom: 2px solid #ddd;
 }
 
 .shop_table td {
   padding: 15px;
-  border-bottom: 1px solid #ddd;
   vertical-align: middle;
-}
-
-.product-name {
-  width: 80%;
-  display: flex;
-  align-items: center;
-  gap: 15px;
-}
-
-.book-cover {
-  flex-shrink: 0;
 }
 
 .book-cover img {
