@@ -25,4 +25,17 @@ PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
 	WHERE cartItemNo = #{cartItemNo}
 </delete>
 
+<delete id="deleteCarts">
+    DELETE FROM cart
+    WHERE cartItemNo IN
+    <foreach
+        collection="cartItemNos"
+        item="cartItemNo"
+        open="("
+        separator=","
+        close=")">
+        #{cartItemNo}
+    </foreach>
+</delete>
+
 </mapper>

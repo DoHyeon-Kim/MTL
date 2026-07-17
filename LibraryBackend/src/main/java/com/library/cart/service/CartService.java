@@ -10,4 +10,6 @@ public interface CartService {
 	
 	void deleteCart(int cartItemNo);
 	
+	void deleteCart(int[] cartItemNo);
+	
 }

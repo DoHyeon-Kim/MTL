@@ -3,10 +3,13 @@ import { computed, ref, onMounted } from 'vue'
 import { useRoute } from 'vue-router'
 import axios from 'axios'
 
+// 수정사항 - 버튼위치 / Delete함수 로직수정
+
 interface CartItem {
   cartItemNo: number
   bookTitle: string
   writer: string
+  loanAvailable: boolean
 }
 
 const route = useRoute()
@@ -25,9 +28,7 @@ onMounted(() => {
 
 async function getCartData() {
   try {
-    const res = await axios.get<CartItem[]>(
-      `http://localhost:8099/carts/${memberNo}`
-    )
+    const res = await axios.get<CartItem[]>(`http://localhost:8099/carts/${memberNo}`)
     carts.value = res.data
   } catch (error) {
     console.error('カートエラー:', error)
@@ -36,32 +37,40 @@ async function getCartData() {
 
 async function removeItem(cartItemNo: number) {
   try {
-    await axios.delete(
-      `http://localhost:8099/carts/${cartItemNo}`
-    )
-    await getCartData()
+    await axios.delete(`http://localhost:8099/carts/${cartItemNo}`)
   } catch (error) {
     console.error('削除失敗:', error)
     alert('削除失敗')
   }
+  getCartData()
 }
 
-function multSelect(selectedIds : number[]){
-Promise.all(
-      selectedIds .map(itemNo => removeItem(itemNo))
-)
+async function multSelect(selectedIds: number[]) {
+  if (selectedIds.length === 0) {
+    alert('削除する項目を選択してください')
+    return
+  }
+  await axios.delete('http://localhost:8099/carts', {
+    data: selectedIds,
+  })
+
+  checkedItems.value = []
+  await getCartData()
+}
+
+async function resvItem() {
+  // 処理loan
 }
 
 function selectAll() {
-  checkedItems.value = checkedItems.value.length === cartItems.value.length
-    ? []
-    : cartItems.value.map(item => item.cartItemNo)
+  checkedItems.value =
+    checkedItems.value.length === cartItems.value.length
+      ? []
+      : cartItems.value.map(item => item.cartItemNo)
 }
-
 </script>
 
 <template>
-
   <div class="cart-main woocommerce">
     <div class="container">
       <div class="row">
@@ -73,22 +82,32 @@ function selectAll() {
           </div>
 
           <template v-else>
-            <table class="table table-bordered shop_table">
+            <div>
+              <button class="select-all" @click.stop="selectAll">
+                all select
+              </button>
 
+              <div class="select-devdel">
+                <button @click.stop="multSelect(checkedItems)">
+                  select del
+                </button>
+
+                <button @click.stop="multSelect(checkedItems)">
+                  select rev
+                </button>
+              </div>
+            </div>
+
+            <table class="table shop_table">
               <thead>
-
                 <tr>
-
                   <th>一覧</th>
                   <th></th>
                 </tr>
               </thead>
 
               <tbody>
-                <tr
-                  v-for="item in cartItems"
-                  :key="item.cartItemNo"
-                >
+                <tr v-for="item in cartItems" :key="item.cartItemNo">
                   <td class="product-name">
                     <input
                       type="checkbox"
@@ -97,10 +116,7 @@ function selectAll() {
                       v-model="checkedItems"
                     />
                     <span class="book-cover">
-                      <img
-                        :src="PLACEHOLDER_IMAGE"
-                        :alt="item.bookTitle"
-                      />
+                      <img :src="PLACEHOLDER_IMAGE" :alt="item.bookTitle" />
                     </span>
                     <span class="product-detail">
                       <span><strong>{{ item.bookTitle }}</strong></span>
@@ -109,26 +125,20 @@ function selectAll() {
                   </td>
 
                   <td class="product-remove">
-                    <button @click.stop="removeItem(item.cartItemNo)" >
-                    削除
+                    <button @click.stop="removeItem(item.cartItemNo)">
+                      予約
                     </button>
 
-                    <br>
-
-                    <button @click.stop="removeItem(item.cartItemNo)" >
-                    予約
+                    <button
+                      @click.stop="removeItem(item.cartItemNo)"
+                      style="margin-top: 10px;"
+                    >
+                      削除
                     </button>
-
                   </td>
                 </tr>
               </tbody>
             </table>
-            <button @click.stop="selectAll">
-              all select
-            </button>
-            <button class="select-delete" @click.stop="multSelect(checkedItems)">
-              select rev
-            </button>
           </template>
         </div>
       </div>
@@ -137,19 +147,41 @@ function selectAll() {
 </template>
 
 <style scoped>
-
 .book-checkbox {
   flex-shrink: 0;
   width: 16px;
   height: 16px;
 }
 
-.product-remove button {
-  color: #000;
-  border: thin solid #000;
+.cart-title + div {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 10px;
+  margin-top: 10px;
+  margin-bottom: 3px;
 }
-.select-delete{
-  float: right;
+
+.select-all,
+.select-devdel button {
+  display: inline-flex;
+  justify-content: center;
+  align-items: center;
+  box-sizing: border-box;
+  height: 36px;
+  min-width: 100px;
+  padding: 0 16px;
+  font-size: 13px;
+  line-height: 1;
+  border: none;
+}
+
+.select-devdel {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  width: auto;
+  float: none;
 }
 
 .cart-title {
@@ -219,5 +251,4 @@ function selectAll() {
   width: 20%;
   text-align: center;
 }
-
 </style>

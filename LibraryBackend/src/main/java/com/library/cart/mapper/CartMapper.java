@@ -22,4 +22,8 @@ public interface CartMapper {
 	    void deleteCart(
 	        @Param("cartItemNo") int cartItemNo
 	    );
+	    
+	    void deleteCarts(
+	            @Param("cartItemNos") int[] cartItemNos
+	        );
 }

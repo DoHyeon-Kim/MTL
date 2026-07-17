@@ -11,10 +11,9 @@ import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RestController;
 import org.springframework.web.bind.annotation.CrossOrigin;
 
-
 import com.library.cart.dto.CartDTO;
 import com.library.cart.service.CartService;
-
+import java.util.Arrays;
 import lombok.RequiredArgsConstructor;
 
 @RestController
@@ -33,6 +32,11 @@ public class CartController {
 	public void deleteCart(@PathVariable ("cartItemNo")int cartItemNo ) {
 		
 		cartService.deleteCart(cartItemNo);
+	}
+	
+	@DeleteMapping("/carts")
+	public void deleteCarts(@RequestBody int[] cartItemNos) {
+	    cartService.deleteCart(cartItemNos);
 	}
 	
 }
