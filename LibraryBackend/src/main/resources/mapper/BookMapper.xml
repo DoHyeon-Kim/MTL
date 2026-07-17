@@ -6,13 +6,14 @@
 
 <mapper namespace="com.library.book.mapper.BookMapper">
 
-<!--図書登録-->
-<insert id="createBook"
+	<!--図書登録 -->
+	<insert id="createBook"
 		parameterType="com.library.book.dto.BookDTO">
 
 		INSERT INTO book
 		(
-		 bookImg
+		bookImg
+		, bookNumberInfo
 		, bookTitle
 		, Writer
 		, Publisher
@@ -23,36 +24,94 @@
 		)
 		VALUES
 		(
-		 #{bookImg}
+		#{bookImg}
+		, #{bookNumberInfo}
 		, #{bookTitle}
 		, #{Writer}
 		, #{Publisher}
-		, #{Category}
+		,
+		#{Category}
 		, #{bookContent}
 		, #{publicationDate}
-		, #{registrationDate}
+		, now()
 		)
 
 	</insert>
-<!--図書削除-->
 
+	<!--図書詳細 -->
+	<select id="bookDetail" parameterType="Long"
+		resultType="com.library.book.dto.BookDTO">
 
-<!--図書修正-->
-
-<!--図書リスト-->
-<select id="bookList"
-parameterType="String"
-	resultType="com.library.book.dto.BookDTO">
-	
-	SELECT 
-	    bookNumber
-	    , bookTitle
+		SELECT
+		bookImg
+		, bookTitle
 		, writer
-    	, publicationDate
-	FROM 
+		, Publisher
+		, Category
+		, bookContent
+		, publicationDate
+		, registrationDate
+		, bookNumberInfo
+		FROM
 		book
-	WHERE
+		WHERE
+		bookNumberInfo = #{bookNumberInfo}
+
+		LIMIT 1
+
+	</select>
+
+	<!--図書在庫状態 -->
+	<select id="bookStockList" parameterType="Long"
+		resultType="com.library.book.dto.BookLoanStatusDTO">
+
+		SELECT
+		b.bookNumber
+		, b.bookNumberInfo
+		, b.loanAvailable
+		, mi.nameH
+		, l.loanDate
+		, l.dueDate
+		FROM
+		book b
+		LEFT JOIN
+		loan l
+		ON
+		b.bookNumber = l.bookNumber
+		AND l.returnDate IS NULL
+		LEFT JOIN
+		memberinfo mi
+		ON
+		l.memberNo = mi.memberNo
+		WHERE
+		b.bookNumberInfo = #{bookNumberInfo}
+		ORDER BY
+		b.bookNumber ASC
+	</select>
+	<!--図書削除 -->
+
+
+
+	<!--図書修正 -->
+
+	<!--図書リスト -->
+	<select id="bookList" parameterType="String"
+		resultType="com.library.book.dto.BookDTO">
+
+		SELECT
+		MIN(bookNumber) AS bookNumber
+		,MIN(bookTitle) AS bookTitle
+		,MIN(writer) AS writer
+		,MIN(publicationDate) AS publicationDate
+		,MIN(registrationDate) AS registrationDate
+		,MIN(loanAvailable) AS loanAvailable
+		, bookNumberInfo
+		FROM
+		book
+		WHERE
 		bookTitle = #{title}
-</select>
+		GROUP BY
+		bookNumberInfo
+	</select>
 
 </mapper>

@@ -3,13 +3,15 @@ package com.library.book.dto;
 import java.time.LocalDate;
 import java.time.LocalDateTime;
 
+import com.fasterxml.jackson.annotation.JsonFormat;
+
 import lombok.Data;
 
 @Data
 public class BookDTO {
 
 	//図書リスト番号
-	private Long bookNumber;
+	private int bookNumber;
 
 	//図書固有番号
 	private Long bookNumberInfo;
@@ -39,6 +41,7 @@ public class BookDTO {
 	private LocalDate publicationDate;
 
 	//登録日
+	@JsonFormat(pattern = "yyyy-MM-dd HH:mm:ss")
 	private LocalDateTime registrationDate;
 
 }

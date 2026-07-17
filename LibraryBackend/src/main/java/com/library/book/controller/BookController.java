@@ -1,8 +1,14 @@
 package com.library.book.controller;
 
+import java.io.File;
+import java.io.IOException;
+import java.time.LocalDateTime;
+import java.time.format.DateTimeFormatter;
 import java.util.List;
+import java.util.UUID;
 
-import org.springframework.web.bind.annotation.CrossOrigin;
+import org.springframework.http.MediaType;
+import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
@@ -10,24 +16,84 @@ import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.PutMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestParam;
+import org.springframework.web.bind.annotation.RequestPart;
 import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.multipart.MultipartFile;
 
 import com.library.book.dto.BookDTO;
+import com.library.book.dto.BookLoanStatusDTO;
 import com.library.book.service.BookServiceImpl;
 
 import lombok.RequiredArgsConstructor;
 
 @RestController
 @RequiredArgsConstructor
-@CrossOrigin(origins = "http://localhost:5173")
 public class BookController {
 	private final BookServiceImpl bookService;
 
 	//図書登録
-	@PostMapping("/bookcreate")
-	public void insertBook(@RequestBody BookDTO bookDTO) {
-		bookService.createBook(bookDTO);
+	@PostMapping(value = "/bookcreate", consumes = { MediaType.MULTIPART_FORM_DATA_VALUE })
+	public void insertBook(
+			@RequestPart("book") BookDTO bookDTO,
+			@RequestPart(value = "image", required = false) MultipartFile imageFile) {
+		String uploadDir = "C:/uploads/images/";
+
+		if (imageFile != null && !imageFile.isEmpty()) {
+			String originalFileName = imageFile.getOriginalFilename();
+			String storedFileName = UUID.randomUUID().toString() + "_" + originalFileName;
+
+			File saveFile = new File(uploadDir + storedFileName);
+			if (!saveFile.getParentFile().exists()) {
+				saveFile.getParentFile().mkdirs();
+			}
+			try {
+				imageFile.transferTo(saveFile);
+			} catch (IOException e) {
+				e.printStackTrace();
+				throw new RuntimeException("予期せぬエラーが発生しました.", e);
+			}
+
+			String imageUrl = "http://localhost:8099/uploads/" + storedFileName;
+
+			bookDTO.setBookImg(imageUrl);
+		}
+
+		Long bookCount = bookDTO.getBookNumberInfo();
+
+		String today = LocalDateTime.now().format(DateTimeFormatter.ofPattern("yyMMddHHmmssSSS"));
+
+		Long uniqueBase = Long.parseLong(today);
+
+		for (int i = 0; bookCount > i; i++) {
+
+//			Long bookUniqueNumber = uniqueBase + i;
+
+			bookDTO.setBookNumberInfo(uniqueBase);
+
+			bookService.createBook(bookDTO);
+		}
+
 	}
+
+	//図書詳細
+	@GetMapping(value = "/bookdetail/{bookNumberInfo}")
+	public ResponseEntity<BookDTO> getBookDetail(@PathVariable Long bookNumberInfo) {
+		
+        BookDTO bookDTO = new BookDTO();
+        bookDTO.setBookNumberInfo(bookNumberInfo); // DTO에 bookNumber 필드가 있다고 가정
+        
+        BookDTO result = bookService.bookDetail(bookDTO);
+        return ResponseEntity.ok(result);
+    }
+	
+	@GetMapping("/bookdetail/{bookNumberInfo}/stock")
+    public ResponseEntity<List<BookLoanStatusDTO>> getBookStock(@PathVariable Long bookNumberInfo) {
+        
+        List<BookLoanStatusDTO> stockList = bookService.bookStockList(bookNumberInfo);
+        
+        return ResponseEntity.ok(stockList);
+    }
+	
 
 	//図書削除
 	@DeleteMapping("/api/books/{bookId}")
@@ -47,7 +113,7 @@ public class BookController {
 	//図書リスト
 	@GetMapping("/booklist")
 	public List<BookDTO> bookList(@RequestParam(value = "title", required = false) String title) {
-
+		
 		return bookService.bookList(title);
 	}
 }
