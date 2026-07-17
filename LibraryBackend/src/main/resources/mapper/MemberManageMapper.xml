@@ -5,11 +5,11 @@
 	"https://mybatis.org/dtd/mybatis-3-mapper.dtd">
 
 <mapper
-	namespace="com.library.usermanage.mapper.UserManageMapper">
+	namespace="com.library.membermanage.mapper.UserManageMapper">
 
 	<!--図書登録 -->
 	<insert id="insertbook"
-		parameterType="com.library.usermanage.dto.UserDTO">
+		parameterType="com.library.membermanage.dto.MemberDTO">
 
 		INSERT INTO Book
 		(
@@ -32,7 +32,7 @@
 
 	<!--ユーザーリスト -->
 	<select id="memberList" parameterType="String"
-		resultType="com.library.usermanage.dto.UserLoanStatusDTO">
+		resultType="com.library.membermanage.dto.MemberLoanStatusDTO">
 
 		Select m.memberId
 		, mi.nameH
