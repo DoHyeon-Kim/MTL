@@ -1,17 +1,15 @@
 <template>
   <MainHeader v-if="showMainHeader" />
 
-  <div class="container-fluid px-0">
-    <div class="row g-0">
-      <div v-if="showMainSidebar" class="col-md-3">
-        <MainSidebar />
+  <div class="container">
+    <div class="row">
+      <div v-if="sidebarType" class="col-md-3">
+        <AdminSidebar v-if="sidebarType === 'admin'" />
+        <UserSidebar v-else-if="sidebarType === 'user'" />
+        <SubAdminSidebar v-else-if="sidebarType === 'subadmin'" />
       </div>
 
-      <div v-if="showbookSidebar" class="col-md-3">
-        <BookSidebar />
-      </div>
-
-      <main :class="mainContentClass">
+      <main class="main-content" :class="sidebarType ? 'col-md-9' : 'col-md-12'">
         <RouterView />
       </main>
     </div>
@@ -21,49 +19,73 @@
 </template>
 
 <script setup lang="ts">
-import { computed } from "vue";
-import { RouterView, useRoute } from "vue-router";
+import { computed } from 'vue'
+import { RouterView, useRoute } from 'vue-router'
 
-import MainHeader from "@/components/MainHeader.vue";
-import MainFooter from "@/components/MainFooter.vue";
-import MainSidebar from "@/components/MainSidebar.vue";
-import BookSidebar from "@/components/bookSidebar.vue";
+import MainHeader from '@/components/MainHeader.vue'
+import MainFooter from '@/components/MainFooter.vue'
+import AdminSidebar from '@/components/AdminSidebar.vue'
+import UserSidebar from '@/components/UserSidebar.vue'
+import SubAdminSidebar from './components/SubAdminSiderbar.vue'
 
-const route = useRoute();
+const route = useRoute()
 
 const showMainHeader = computed(() => {
-  return route.meta.showMainHeader !== false;
-});
-
-const showMainSidebar = computed(() => {
-  return route.meta.showMainSidebar === true;
-});
+  return route.meta.showMainHeader !== false
+})
 
 const showMainFooter = computed(() => {
-  return route.meta.showMainFooter !== false;
-});
+  return route.meta.showMainFooter !== false
+})
 
-const showbookSidebar = computed(() => {
-  return route.meta.showbookSidebar === true;
-});
+const sidebarType = computed(() => {
 
-const mainContentClass = computed(() => {
-  if (showMainSidebar.value || showbookSidebar.value) {
-    return "col-md-9";
+  if (route.meta.sidebarType !== 'mypage') {
+    return route.meta.sidebarType
   }
-  return "col-md-12";
-});
+
+  switch (auth.role) {
+    case 'ROLE_ADMIN':
+      return 'admin'
+
+    case 'ROLE_SUBADMIN':
+      return 'subadmin'
+
+    case 'ROLE_USER':
+      return 'user'
+
+    default:
+      return null
+  }
+})
+
+
+//Pinia
+import axios from 'axios'
+import { onMounted } from 'vue'
+import { useAuthStore } from '@/stores/auth'
+
+const auth = useAuthStore()
+
+onMounted(async () => {
+
+  const res = await axios.get(
+    'http://localhost:8099/session',
+    {
+      withCredentials: true
+    }
+  )
+
+  auth.memberNo = res.data.memberNo
+  auth.memberId = res.data.memberId
+  auth.role = res.data.role
+
+})
+
 </script>
 
 <style scoped>
-main {
-  padding: 20px;
-}
-.main-layout {
-  display: flex;
-}
-
 .main-content {
-  flex: 1;
+  min-width: 0;
 }
 </style>

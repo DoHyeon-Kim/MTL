@@ -1,0 +1,66 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<!DOCTYPE mapper
+PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+"https://mybatis.org/dtd/mybatis-3-mapper.dtd">
+
+<mapper namespace="com.library.signupview.mapper.SignUpViewMapper">
+
+	<insert id="memberSign"
+        useGeneratedKeys="true"
+        keyProperty="memberNo">
+
+    INSERT INTO member (
+        memberId,
+        memberPw,
+        role,
+        memberStatus
+    )
+    VALUES (
+        #{memberId},
+        #{memberPw},
+        #{role},
+        #{memberStatus}
+    )
+
+</insert>
+	
+	<insert id="memberInfoSign">
+
+    INSERT INTO memberInfo (
+        memberNo,
+        nameH,
+        nameK,
+        phone,
+        email,
+        addNumber,
+        adds,
+        infoAdd,
+        bookCount
+    )
+    VALUES (
+        #{memberNo},
+        #{nameH},
+        #{nameK},
+        #{phone},
+        #{email},
+        #{addNumber},
+        #{adds},
+        #{infoAdd},
+        #{bookCount}
+    )
+
+</insert>
+
+<select id="selectSignId">
+	SELECT count(memberId)
+	from member
+	where memberId = #{memberId}
+</select>
+
+<select id="selectSignEmail">
+	select count(email)
+	from memberinfo
+	where email = #{email}
+</select>
+</mapper>
