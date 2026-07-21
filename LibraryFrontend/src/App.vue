@@ -1,19 +1,17 @@
 <template>
   <MainHeader v-if="showMainHeader" />
 
-  <div class="container">
-    <div class="row">
-      <div
-        v-if="showMainSidebar"
-        class="col-md-3"
-      >
+  <div class="container-fluid px-0">
+    <div class="row g-0">
+      <div v-if="showMainSidebar" class="col-md-3">
         <MainSidebar />
       </div>
 
-      <main
-        class="main-content"
-        :class="showMainSidebar ? 'col-md-9' : 'col-md-12'"
-      >
+      <div v-if="showbookSidebar" class="col-md-3">
+        <BookSidebar />
+      </div>
+
+      <main :class="mainContentClass">
         <RouterView />
       </main>
     </div>
@@ -23,29 +21,44 @@
 </template>
 
 <script setup lang="ts">
-import { computed } from 'vue'
-import { RouterView, useRoute } from 'vue-router'
+import { computed } from "vue";
+import { RouterView, useRoute } from "vue-router";
 
-import MainHeader from '@/components/MainHeader.vue'
-import MainFooter from '@/components/MainFooter.vue'
-import MainSidebar from '@/components/MainSidebar.vue'
+import MainHeader from "@/components/MainHeader.vue";
+import MainFooter from "@/components/MainFooter.vue";
+import MainSidebar from "@/components/MainSidebar.vue";
+import BookSidebar from "@/components/bookSidebar.vue";
 
-const route = useRoute()
+const route = useRoute();
 
 const showMainHeader = computed(() => {
-  return route.meta.showMainHeader !== false
-})
+  return route.meta.showMainHeader !== false;
+});
 
 const showMainSidebar = computed(() => {
-  return route.meta.showMainSidebar === true
-})
+  return route.meta.showMainSidebar === true;
+});
 
 const showMainFooter = computed(() => {
-  return route.meta.showMainFooter !== false
-})
+  return route.meta.showMainFooter !== false;
+});
+
+const showbookSidebar = computed(() => {
+  return route.meta.showbookSidebar === true;
+});
+
+const mainContentClass = computed(() => {
+  if (showMainSidebar.value || showbookSidebar.value) {
+    return "col-md-9";
+  }
+  return "col-md-12";
+});
 </script>
 
 <style scoped>
+main {
+  padding: 20px;
+}
 .main-layout {
   display: flex;
 }

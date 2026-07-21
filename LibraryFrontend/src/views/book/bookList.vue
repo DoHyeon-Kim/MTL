@@ -1,26 +1,52 @@
 <script setup lang="ts">
-import { onMounted, ref } from "vue";
+import { computed, onMounted, ref, watch } from "vue";
+import { useRoute } from "vue-router";
 import axios from "axios";
 
 interface Book {
   bookNumber: number;
+  bookNumberInfo: number;
   bookTitle: string;
+  category: string;
 }
 
+const route = useRoute();
 const Search = ref("");
 const book = ref<Book[]>([]);
 
 async function getData() {
-  const res = await axios.get<Book[]>("http://localhost:8099/api/book");
+  const res = await axios.get<Book[]>("http://localhost:8099/booklist");
   book.value = res.data;
-  console.log(res.data);
 }
 
-async function searchData(){
-    const res=await axios.get<Book[]>(`http://localhost:8099/api/book/${Search.value}`);
-    book.value = res.data;
-    console.log(res.data);
+async function searchData() {
+  const res = await axios.get<Book[]>(
+    `http://localhost:8099/booklist/${Search.value}`
+  );
+  book.value = res.data;
 }
+
+const selectedCategory = computed(() => {
+  return typeof route.params.category === "string"
+    ? decodeURIComponent(route.params.category)
+    : "";
+});
+
+const filteredBooks = computed(() => {
+  if (!selectedCategory.value) {
+    return book.value;
+  }
+
+  return book.value.filter(item => item.category === selectedCategory.value);
+});
+
+watch(
+  () => route.params.category,
+  () => {
+    Search.value = "";
+    getData();
+  }
+);
 
 onMounted(() => {
   getData();
@@ -28,19 +54,25 @@ onMounted(() => {
 </script>
 
 <template>
-  <div>
-    <input
-      v-model="Search"
-      type="text"
-      placeholder="검색어를 입력하세요"
-      id="search"
-    />
-    <button @click="searchData">검색</button>
-    
+  <div class="content">
+    <div id="search">
+      <input
+        v-model="Search"
+        type="text"
+        placeholder="Please enter a search"
+        id="sinput"
+      />
+      <button @click="searchData">검색</button>
+    </div>
+
+    <h3 v-if="selectedCategory" class="category-title">
+      {{ selectedCategory }}
+    </h3>
+
     <div class="bookList">
-      <div id="book" v-for="bookNo in book" :key="bookNo.bookNumber">
+      <div id="book" v-for="bookNo in filteredBooks" :key="bookNo.bookNumber">
         <img
-          @click="$router.push({ path: '/bookDetail' })"
+          @click="$router.push({ path: `/bookdetail/${bookNo.bookNumberInfo}` })"
           :src="`/book/${bookNo.bookTitle}.jpg`"
           :alt="bookNo.bookTitle"
         />
@@ -51,9 +83,24 @@ onMounted(() => {
 </template>
 
 <style scoped>
+.content {
+  width: 100%;
+}
+
 #search {
   display: flex;
-  margin: 20px auto;
+  justify-content: center;
+  gap: 10px;
+  margin: 20px 0;
+}
+
+#sinput {
+  width: 70%;
+  max-width: 400px;
+}
+
+.category-title {
+  margin: 10px 0 20px 0;
 }
 
 .bookList {
