@@ -9,12 +9,10 @@ import java.util.UUID;
 
 import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
-import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.PutMapping;
-import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RequestPart;
 import org.springframework.web.bind.annotation.RestController;
@@ -66,7 +64,7 @@ public class BookController {
 
 		for (int i = 0; bookCount > i; i++) {
 
-//			Long bookUniqueNumber = uniqueBase + i;
+			//			Long bookUniqueNumber = uniqueBase + i;
 
 			bookDTO.setBookNumberInfo(uniqueBase);
 
@@ -78,42 +76,52 @@ public class BookController {
 	//図書詳細
 	@GetMapping(value = "/bookdetail/{bookNumberInfo}")
 	public ResponseEntity<BookDTO> getBookDetail(@PathVariable Long bookNumberInfo) {
-		
-        BookDTO bookDTO = new BookDTO();
-        bookDTO.setBookNumberInfo(bookNumberInfo); // DTO에 bookNumber 필드가 있다고 가정
-        
-        BookDTO result = bookService.bookDetail(bookDTO);
-        return ResponseEntity.ok(result);
-    }
-	
+
+		BookDTO bookDTO = new BookDTO();
+		bookDTO.setBookNumberInfo(bookNumberInfo);
+
+		BookDTO result = bookService.bookDetail(bookDTO);
+		return ResponseEntity.ok(result);
+	}
+
 	@GetMapping("/bookdetail/{bookNumberInfo}/stock")
-    public ResponseEntity<List<BookLoanStatusDTO>> getBookStock(@PathVariable Long bookNumberInfo) {
-        
-        List<BookLoanStatusDTO> stockList = bookService.bookStockList(bookNumberInfo);
-        
-        return ResponseEntity.ok(stockList);
-    }
-	
+	public ResponseEntity<List<BookLoanStatusDTO>> getBookStock(@PathVariable Long bookNumberInfo) {
+
+		List<BookLoanStatusDTO> stockList = bookService.bookStockList(bookNumberInfo);
+
+		return ResponseEntity.ok(stockList);
+	}
 
 	//図書削除
-	@DeleteMapping("/api/books/{bookId}")
+	@PutMapping("/bookdelete/{bookNumberInfo}")
 	public void deleteBook(
-			@PathVariable Long bookId) {
-		bookService.deleteBook(bookId);
+			@PathVariable Long bookNumberInfo) {
+		bookService.deleteBook(bookNumberInfo);
+	}
+
+	//図書在庫削除
+	@PutMapping("/bookDeleteStock/{bookNumber}")
+	public void deleteBookStock(
+			@PathVariable int bookNumber) {
+		bookService.bookDeleteStock(bookNumber);
 	}
 
 	//図書修正
-	@PutMapping("/api/books/{bookId}")
-	public void updateBook(
-			@PathVariable Long bookId,
-			@RequestBody BookDTO bookDTO) {
-		bookService.updateBook(bookDTO);
+	@PutMapping(value = "/bookupdate/{bookId}", consumes = { MediaType.MULTIPART_FORM_DATA_VALUE })
+	public ResponseEntity<?> updateBook(
+			@PathVariable("bookId") String bookId,
+			@RequestPart("book") BookDTO bookDTO,
+			@RequestPart(value = "image", required = false) MultipartFile imageFile) {
+
+		bookService.updateBook(bookId, bookDTO, imageFile);
+
+		return ResponseEntity.ok(bookDTO);
 	}
 
 	//図書リスト
 	@GetMapping("/booklist")
 	public List<BookDTO> bookList(@RequestParam(value = "title", required = false) String title) {
-		
+
 		return bookService.bookList(title);
 	}
 }

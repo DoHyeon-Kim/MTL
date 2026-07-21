@@ -20,11 +20,14 @@ public interface BookMapper {
 	List<BookLoanStatusDTO> bookStockList(Long bookNumberInfo);
 
 	//図書削除
-	void deleteBoard(BookDTO bookId);
+	void deleteBook(Long bookNumberInfo);
 
 	//図書修正
-	void updateBoard(BookDTO bookDTO);
+	void updateBook(BookDTO bookDTO);
 
 	//図書リスト
 	List<BookDTO> bookList(String title);
+	
+	//図書在庫削除
+	void bookDeleteStock(int BookNumber);
 }

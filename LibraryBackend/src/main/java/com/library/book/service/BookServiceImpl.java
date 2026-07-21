@@ -1,8 +1,12 @@
 package com.library.book.service;
 
+import java.io.File;
+import java.io.IOException;
 import java.util.List;
+import java.util.UUID;
 
 import org.springframework.stereotype.Service;
+import org.springframework.web.multipart.MultipartFile;
 
 import com.library.book.dto.BookDTO;
 import com.library.book.dto.BookLoanStatusDTO;
@@ -38,22 +42,52 @@ public class BookServiceImpl implements BookService {
 
 	//図書削除
 	@Override
-	public void deleteBook(Long bookId) {
-		// TODO 自動生成されたメソッド・スタブ
+	public void deleteBook(Long bookNumberInfo) {
 
+		bookMapper.deleteBook(bookNumberInfo);
 	}
 
 	//図書修正
 	@Override
-	public void updateBook(BookDTO bookDTO) {
-		// TODO 自動生成されたメソッド・スタブ
+	public void updateBook(String bookId, BookDTO bookDTO, MultipartFile imageFile) {
 
+		String uploadDir = "C:/uploads/images/";
+
+		if (imageFile != null && !imageFile.isEmpty()) {
+			String originalFileName = imageFile.getOriginalFilename();
+			String storedFileName = UUID.randomUUID().toString() + "_" + originalFileName;
+
+			File saveFile = new File(uploadDir + storedFileName);
+			if (!saveFile.getParentFile().exists()) {
+				saveFile.getParentFile().mkdirs();
+			}
+			try {
+				imageFile.transferTo(saveFile);
+			} catch (IOException e) {
+				e.printStackTrace();
+				throw new RuntimeException("予期せぬエラーが発生しました.", e);
+			}
+
+			String imageUrl = "http://localhost:8099/uploads/" + storedFileName;
+
+			bookDTO.setBookImg(imageUrl);
+
+			bookMapper.updateBook(bookDTO);
+
+		}
 	}
 
 	//図書リスト
 	@Override
 	public List<BookDTO> bookList(String title) {
 		return bookMapper.bookList(title);
+	}
+
+	//図書在庫削除
+	@Override
+	public void bookDeleteStock(int bookNumber) {
+		
+		bookMapper.bookDeleteStock(bookNumber);
 	}
 
 }

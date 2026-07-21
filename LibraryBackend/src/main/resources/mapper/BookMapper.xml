@@ -29,8 +29,7 @@
 		, #{bookTitle}
 		, #{Writer}
 		, #{Publisher}
-		,
-		#{Category}
+		, #{Category}
 		, #{bookContent}
 		, #{publicationDate}
 		, now()
@@ -84,15 +83,41 @@
 		ON
 		l.memberNo = mi.memberNo
 		WHERE
-		b.bookNumberInfo = #{bookNumberInfo}
+		b.bookNumberInfo =
+		#{bookNumberInfo}
+		AND
+		skj_Flg = '0'
 		ORDER BY
 		b.bookNumber ASC
 	</select>
+	
 	<!--図書削除 -->
-
-
+	<update id="deleteBook" parameterType="Long">
+    UPDATE 
+    book 
+    SET 
+    skj_Flg = 1
+    WHERE 
+    bookNumberInfo = #{bookNumberInfo}
+	</update>
 
 	<!--図書修正 -->
+	<update id="updateBook" parameterType="BookDTO">
+		UPDATE
+		book
+		SET
+		bookImg = #{bookImg}
+		, bookTitle = #{bookTitle}
+		, Writer = #{Writer}
+		, Publisher = #{Publisher}
+		, Category = #{Category}
+		, bookContent = #{bookContent}
+		, publicationDate = #{publicationDate}
+		, registrationDate = #{registrationDate}
+		WHERE
+		bookNumberInfo = #{bookNumberInfo}
+
+	</update>
 
 	<!--図書リスト -->
 	<select id="bookList" parameterType="String"
@@ -104,14 +129,24 @@
 		,MIN(writer) AS writer
 		,MIN(publicationDate) AS publicationDate
 		,MIN(registrationDate) AS registrationDate
-		,MIN(loanAvailable) AS loanAvailable
 		, bookNumberInfo
 		FROM
 		book
 		WHERE
 		bookTitle = #{title}
+		AND
+		skj_Flg = '0'
 		GROUP BY
 		bookNumberInfo
 	</select>
 
+	<!--図書在庫削除 -->
+	<update id="bookDeleteStock" parameterType="int">
+	    UPDATE 
+		book 
+		SET 
+		skj_Flg = 1
+		WHERE 
+		bookNumber = #{bookNumber}
+	</update>
 </mapper>
