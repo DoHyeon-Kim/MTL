@@ -1,0 +1,119 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<!DOCTYPE mapper
+PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+"https://mybatis.org/dtd/mybatis-3-mapper.dtd">
+
+<mapper namespace="com.library.memberinfo.mapper.MemberInfoMapper">
+
+	<select id="selectMemberInfo" >
+		SELECT
+    		m.memberId,
+    		mi.nameH,
+    		mi.nameK,
+    		mi.phone,
+    		mi.email,
+    		mi.addNumber,
+    		mi.adds,
+   		 	mi.infoAdd
+		FROM member m JOIN memberInfo mi 
+		             ON m.memberNo = mi.memberNo
+		WHERE m.memberNo = #{memberNo}
+	</select>
+	
+	<update id="putMember">
+    	UPDATE member
+    	SET
+        	memberPw = #{memberPw}
+    	WHERE
+        	memberNo = #{memberNo}
+
+	</update>
+
+	<update id="putMemberInfo">
+
+    	UPDATE memberinfo
+    	SET
+        	phone = #{phone},
+        	email = #{email},
+        addNumber = #{addNumber},
+        adds = #{adds},
+        infoAdd = #{infoAdd}
+    WHERE
+        memberNo = #{memberNo}
+	</update>
+	
+	<update id="adminPutMember">
+    	UPDATE member
+    	SET
+        	memberPw = #{memberPw},
+        	role = #{role}
+    	WHERE
+        	memberNo = #{memberNo}
+
+	</update>
+
+	<update id="adminPutMemberInfo">
+
+    	UPDATE memberinfo
+    	SET
+        	phone = #{phone},
+        	email = #{email},
+        addNumber = #{addNumber},
+        adds = #{adds},
+        infoAdd = #{infoAdd}
+    WHERE
+        memberNo = #{memberNo}
+	</update>
+	
+	<select id="selectMyPageBookList">
+	SELECT
+  		  r.stars,
+ 		   l.loanNo,
+ 		   l.loanDate,
+ 		   l.returnDate,
+ 		   b.bookTitle,
+ 		   b.bookImg,
+  		  b.writer,
+  		  b.bookNumber
+	FROM loan l JOIN book b
+    		ON b.bookNumber = l.bookNumber
+			LEFT JOIN review r
+   			ON r.loanNo = l.loanNo
+	WHERE l.memberNo = #{memberNo}
+  			AND l.loanDate BETWEEN #{firstDay} AND #{secondDay}
+  			AND b.bookTitle LIKE CONCAT('%', #{titlesearch}, '%');
+	</select>
+	
+	<insert id="insertReview">
+	INSERT INTO review (
+        memberNo,
+        bookNumber,
+        review,
+        stars,
+        loanNo
+    )
+    VALUES (
+        #{memberNo},
+        #{bookNumber},
+        #{review},
+        #{stars},
+        #{loanNo}
+    )
+	</insert>
+	
+	<select id="pwCheck">
+		select memberPW
+		from member
+		where memberNo = #{memberNo};
+	</select>
+	
+	<delete id="deleteMember">
+		DELETE FROM member
+        WHERE memberNo = #{memberNo};
+	</delete>
+		<delete id="deleteMemberinfo">
+		DELETE FROM memberinfo
+        WHERE memberNo = #{memberNo};
+	</delete>
+</mapper>
