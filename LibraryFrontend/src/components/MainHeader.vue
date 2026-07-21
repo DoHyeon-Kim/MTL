@@ -2,6 +2,7 @@
 .navbar-wrapper {
   position: static;
   background-color: #282828;
+
 }
 </style>
 <template>
