@@ -10,20 +10,16 @@ import org.apache.ibatis.annotations.Param;
 @Mapper
 public interface CartMapper {
 
-	List<CartDTO> selectCartByMember(
-	        @Param("memberNo") int memberNo
-	    );
+	List<CartDTO> selectCartByMember(int memberNo);
 
 	    int insertCart(
 	        @Param("memberNo") int memberNo,
 	        @Param("bookNumber") int bookNumber
 	    );
 
-	    void deleteCart(
-	        @Param("cartItemNo") int cartItemNo
-	    );
+	    void deleteCart(int cartItemNo);
 	    
-	    void deleteCarts(
-	            @Param("cartItemNos") int[] cartItemNos
-	        );
+	    void deleteCarts(@Param("cartItemNos") int[] cartItemNos);	  
+	    
+	    int countInCart(CartDTO cartDTO);
 }

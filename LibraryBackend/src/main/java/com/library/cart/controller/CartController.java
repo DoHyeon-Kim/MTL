@@ -28,11 +28,7 @@ public class CartController {
 		return cartService.getCartList(memberNo);
 	}
 	
-	@DeleteMapping("/carts/{cartItemNo}")
-	public void deleteCart(@PathVariable ("cartItemNo")int cartItemNo ) {
-		
-		cartService.deleteCart(cartItemNo);
-	}
+
 	
 	@DeleteMapping("/carts")
 	public void deleteCarts(@RequestBody int[] cartItemNos) {

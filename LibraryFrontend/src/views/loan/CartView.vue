@@ -1,26 +1,23 @@
 <script setup lang="ts">
-import { computed, ref, onMounted } from 'vue'
-import { useRoute } from 'vue-router'
+import { ref, onMounted } from 'vue'
+import { useRoute, useRouter } from 'vue-router'
 import axios from 'axios'
 
-// 수정사항 - 버튼위치 / Delete함수 로직수정
-
 interface CartItem {
+  bookNumber: number
   cartItemNo: number
   bookTitle: string
   writer: string
   loanAvailable: boolean
 }
 
+const router = useRouter()
 const route = useRoute()
 const memberNo = route.params.memberNo
 const PLACEHOLDER_IMAGE: string = '/images/books-media/list-view/book-media-01.jpg'
 
 const carts = ref<CartItem[]>([])
 const checkedItems = ref<number[]>([])
-
-const isEmpty = computed(() => carts.value.length === 0)
-const cartItems = computed(() => carts.value)
 
 onMounted(() => {
   getCartData()
@@ -35,38 +32,52 @@ async function getCartData() {
   }
 }
 
-async function removeItem(cartItemNo: number) {
+async function deleteItems(ids: number[]) {
+  if (ids.length === 0) {
+    alert('削除する項目を選択してください')
+    return
+  }
   try {
-    await axios.delete(`http://localhost:8099/carts/${cartItemNo}`)
+    await axios.delete('http://localhost:8099/carts', { data: ids })
+    checkedItems.value = []
+    getCartData()
   } catch (error) {
     console.error('削除失敗:', error)
     alert('削除失敗')
   }
-  getCartData()
 }
 
-async function multSelect(selectedIds: number[]) {
-  if (selectedIds.length === 0) {
-    alert('削除する項目を選択してください')
+async function reserve(cartItemNos: number[]) {
+  if (cartItemNos.length === 0) {
+    alert('予約する項目を選択してください')
     return
   }
-  await axios.delete('http://localhost:8099/carts', {
-    data: selectedIds,
-  })
-
-  checkedItems.value = []
-  await getCartData()
-}
-
-async function resvItem() {
-  // 処理loan
+  const targets = carts.value.filter(item =>
+    cartItemNos.includes(item.cartItemNo)
+  )
+  try {
+    await axios.post(
+      `http://localhost:8099/loans/${memberNo}`,
+      targets.map(item => item.bookNumber)
+    )
+    deleteItems(cartItemNos)
+  } catch (error) {
+    console.error('予約失敗:', error)
+    alert('予約失敗' + error)
+  }
 }
 
 function selectAll() {
+  const availableItems = carts.value.filter(item => item.loanAvailable)
+
   checkedItems.value =
-    checkedItems.value.length === cartItems.value.length
+    checkedItems.value.length === availableItems.length
       ? []
-      : cartItems.value.map(item => item.cartItemNo)
+      : availableItems.map(item => item.cartItemNo)
+}
+
+function bookshosai(bookNumber: number) {
+  router.push(`/${bookNumber}`)
 }
 </script>
 
@@ -77,7 +88,7 @@ function selectAll() {
         <div class="col-md-12">
           <h2 class="cart-title">レンタルカート</h2>
 
-          <div v-if="isEmpty" class="cart-empty">
+          <div v-if="carts.length === 0" class="cart-empty">
             <p>カートには何もありません</p>
           </div>
 
@@ -88,11 +99,11 @@ function selectAll() {
               </button>
 
               <div class="select-devdel">
-                <button @click.stop="multSelect(checkedItems)">
+                <button @click.stop="deleteItems(checkedItems)">
                   select del
                 </button>
 
-                <button @click.stop="multSelect(checkedItems)">
+                <button @click.stop="reserve(checkedItems)">
                   select rev
                 </button>
               </div>
@@ -107,7 +118,7 @@ function selectAll() {
               </thead>
 
               <tbody>
-                <tr v-for="item in cartItems" :key="item.cartItemNo">
+                <tr v-for="item in carts" :key="item.cartItemNo" @click="bookshosai(item.bookNumber)">
                   <td class="product-name">
                     <input
                       type="checkbox"
@@ -115,6 +126,8 @@ function selectAll() {
                       :value="item.cartItemNo"
                       v-model="checkedItems"
                       style="margin-right: 15px;"
+                      :disabled="!item.loanAvailable"
+                      @click.stop
                     />
                     <span class="book-cover">
                       <img :src="PLACEHOLDER_IMAGE" :alt="item.bookTitle" />
@@ -126,12 +139,15 @@ function selectAll() {
                   </td>
 
                   <td class="product-remove">
-                    <button @click.stop="removeItem(item.cartItemNo)">
+                    <button
+                      @click.stop="reserve([item.cartItemNo])"
+                      :disabled="!item.loanAvailable"
+                    >
                       予約
                     </button>
 
                     <button
-                      @click.stop="removeItem(item.cartItemNo)"
+                      @click.stop="deleteItems([item.cartItemNo])"
                       style="margin-top: 10px;"
                     >
                       削除

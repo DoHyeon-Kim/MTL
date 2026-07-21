@@ -1,0 +1,50 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+
+<!DOCTYPE mapper 
+PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+"https://mybatis.org/dtd/mybatis-3-mapper.dtd">
+
+<mapper namespace="com.library.loan.mapper.LoanMapper">
+
+<select id="selectLoanList" resultType="com.library.loan.dto.LoanDTO">
+	SELECT 
+		m.memberNo,
+		b.bookNumber,
+		b.bookTitle,
+		b.bookImg,
+		l.requeststate,
+		l.dueDate,
+		l.extension	
+	FROM loan l
+	JOIN member m
+		ON l.memberNo = m.memberNo
+	JOIN book b
+		ON l.bookNumber = b.bookNumber
+	WHERE requeststate IN (1, 2)
+</select>
+
+<insert id="insertLoan" parameterType="com.library.loan.dto.LoanDTO">
+    INSERT INTO loan 
+    (bookNumber, memberNo, requeststate)
+    VALUES (#{bookNumber}, #{memberNo}, #{requestState})
+</insert>
+
+
+<select id="selectBookLoanAvailable" parameterType="int" resultType="java.lang.Boolean">
+    SELECT loanAvailable 
+    FROM book 
+    WHERE bookNumber = #{bookNumber}
+</select>
+
+<select id="selectTopCategory" parameterType="int" resultType="string">
+    SELECT b.Category
+    FROM loan l
+    JOIN book b 
+    ON l.bookNumber = b.bookNumber
+    WHERE l.memberNo = #{memberNo}
+    GROUP BY b.Category
+    ORDER BY COUNT(*) DESC
+    LIMIT 1
+</select>
+
+</mapper>

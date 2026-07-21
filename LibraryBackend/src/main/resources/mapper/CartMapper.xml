@@ -12,6 +12,7 @@ PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
            c.bookNumber,
            b.bookImg,
            b.bookTitle,
+           b.loanAvailable,
            b.Writer AS writer
     FROM cart c
     JOIN book b ON c.bookNumber = b.bookNumber
@@ -37,5 +38,13 @@ PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
         #{cartItemNo}
     </foreach>
 </delete>
+
+<select id="countInCart" resultType="int">
+    SELECT COUNT(*)
+    FROM cart
+    WHERE memberNo = #{memberNo}
+      AND bookNumber = #{bookNumber}
+</select>
+
 
 </mapper>
