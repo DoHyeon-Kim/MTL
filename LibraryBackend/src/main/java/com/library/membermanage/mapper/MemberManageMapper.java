@@ -2,7 +2,7 @@ package com.library.membermanage.mapper;
 
 import org.apache.ibatis.annotations.Mapper;
 
-import com.library.book.dto.BookDTO;
+import com.library.bookmanage.dto.BookDTO;
 import com.library.membermanage.dto.MemberLoanStatusDTO;
 
 @Mapper

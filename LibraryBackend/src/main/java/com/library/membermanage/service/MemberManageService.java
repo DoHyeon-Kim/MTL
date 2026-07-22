@@ -1,6 +1,6 @@
 package com.library.membermanage.service;
 
-import com.library.book.dto.BookDTO;
+import com.library.bookmanage.dto.BookDTO;
 import com.library.membermanage.dto.MemberLoanStatusDTO;
 
 public interface MemberManageService {

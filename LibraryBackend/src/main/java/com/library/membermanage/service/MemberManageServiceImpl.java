@@ -2,7 +2,7 @@ package com.library.membermanage.service;
 
 import org.springframework.stereotype.Service;
 
-import com.library.book.dto.BookDTO;
+import com.library.bookmanage.dto.BookDTO;
 import com.library.membermanage.dto.MemberLoanStatusDTO;
 import com.library.membermanage.mapper.MemberManageMapper;
 

@@ -1,11 +1,11 @@
-package com.library.book.mapper;
+package com.library.bookmanage.mapper;
 
 import java.util.List;
 
 import org.apache.ibatis.annotations.Mapper;
 
-import com.library.book.dto.BookDTO;
-import com.library.book.dto.BookLoanStatusDTO;
+import com.library.bookmanage.dto.BookDTO;
+import com.library.bookmanage.dto.BookLoanStatusDTO;
 
 @Mapper
 public interface BookMapper {

@@ -1,11 +1,11 @@
-package com.library.book.service;
+package com.library.bookmanage.service;
 
 import java.util.List;
 
 import org.springframework.web.multipart.MultipartFile;
 
-import com.library.book.dto.BookDTO;
-import com.library.book.dto.BookLoanStatusDTO;
+import com.library.bookmanage.dto.BookDTO;
+import com.library.bookmanage.dto.BookLoanStatusDTO;
 
 public interface BookService {
 

@@ -1,4 +1,4 @@
-package com.library.book.service;
+package com.library.bookmanage.service;
 
 import java.io.File;
 import java.io.IOException;
@@ -8,9 +8,9 @@ import java.util.UUID;
 import org.springframework.stereotype.Service;
 import org.springframework.web.multipart.MultipartFile;
 
-import com.library.book.dto.BookDTO;
-import com.library.book.dto.BookLoanStatusDTO;
-import com.library.book.mapper.BookMapper;
+import com.library.bookmanage.dto.BookDTO;
+import com.library.bookmanage.dto.BookLoanStatusDTO;
+import com.library.bookmanage.mapper.BookMapper;
 
 import lombok.RequiredArgsConstructor;
 

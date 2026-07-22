@@ -1,4 +1,4 @@
-package com.library.book.controller;
+package com.library.bookmanage.controller;
 
 import java.io.File;
 import java.io.IOException;
@@ -18,9 +18,9 @@ import org.springframework.web.bind.annotation.RequestPart;
 import org.springframework.web.bind.annotation.RestController;
 import org.springframework.web.multipart.MultipartFile;
 
-import com.library.book.dto.BookDTO;
-import com.library.book.dto.BookLoanStatusDTO;
-import com.library.book.service.BookServiceImpl;
+import com.library.bookmanage.dto.BookDTO;
+import com.library.bookmanage.dto.BookLoanStatusDTO;
+import com.library.bookmanage.service.BookServiceImpl;
 
 import lombok.RequiredArgsConstructor;
 
