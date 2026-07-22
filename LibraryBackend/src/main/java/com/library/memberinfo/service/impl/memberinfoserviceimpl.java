@@ -21,14 +21,14 @@ public class memberinfoserviceimpl implements MemberInfoService{
 
 	private final MemberInfoMapper memberInfoMapper;
 
-	//会員情報select
+	//会員情報検索
 	@Override
 	public MemberInfoDTO selectMemberInfo(int memberNo) {
 
 		return memberInfoMapper.selectMemberInfo(memberNo);
 	}
 
-	//会員情報put
+	//会員情報修正
 	@Override
 	@Transactional
 	public int putMemberInfo(MemberInfoDTO memberInfoDTO, String loginRole) {
@@ -67,7 +67,7 @@ public class memberinfoserviceimpl implements MemberInfoService{
 		return memberInfoMapper.insertReview(reviewDTO);
 	}
 
-	//member削除
+	//会員退会
 	@Override
 	public int deleteMember(int memberNo, String memberPw) {
 		

@@ -16,7 +16,7 @@ public class SignUpViewController {
 
 		private final SignUpViewService signUpViewService;
 		
-		//登録
+		//会員登録
 		@PostMapping("/sign")
 		public int memberSign(@RequestBody MemberDTO memberDTO,HttpSession session) {
 			

@@ -210,6 +210,7 @@ const insertMember = async () => {
         bookCount: '3'
       }
     )
+    //権限によって処理を変える
     if ("ROLE_ADMIN" == loginRole) {
       if (response.data === 1) {
         alert('会員登録が完了しました。')

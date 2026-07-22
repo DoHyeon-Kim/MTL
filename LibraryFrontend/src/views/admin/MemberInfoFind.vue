@@ -26,6 +26,7 @@ import { useRouter } from 'vue-router'
 const idFind = ref('')
 const router = useRouter()
 
+
 const idCheck = () => {
     router.push({
       name: '/putMember',

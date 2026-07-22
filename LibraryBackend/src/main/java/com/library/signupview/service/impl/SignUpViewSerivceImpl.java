@@ -15,12 +15,12 @@ public class SignUpViewSerivceImpl implements SignUpViewService{
 	
 	private final SignUpViewMapper signUpViewMapper;
 
-	//登録
+	//member sign
 	@Override
 	@Transactional
 	public int memberSign(MemberDTO memberDTO) {
 		
-		
+		//会員登録
 		if(signUpViewMapper.selectSignId(memberDTO.getMemberId()) > 0) {
 			return 2;
 		}else if(signUpViewMapper.selectSignEmail(memberDTO.getEmail()) > 0){

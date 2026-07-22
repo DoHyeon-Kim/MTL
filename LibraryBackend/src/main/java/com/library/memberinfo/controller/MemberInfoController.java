@@ -28,13 +28,13 @@ public class MemberInfoController {
 	
 	private final MemberInfoService memberInfoService;
 	
-	//会員情報select
+	//会員情報検索
 	@GetMapping("/MemberInfo")
 	public MemberInfoDTO selectMemberInfo(@RequestParam("memberNo") int memberNo) {
 	    return memberInfoService.selectMemberInfo(memberNo);
 	}
 	
-	//会員情報put
+	//会員情報修正
 	@PutMapping("/MemberInfo")
 	public int putMemberInfo(@RequestBody MemberInfoDTO memberInfoDTO ,HttpSession session) {
 		
@@ -62,7 +62,7 @@ public class MemberInfoController {
 		return memberInfoService.insertReview(reviewDTO);
 	}
 	
-	//member削除
+	//会員本人退会
 	@DeleteMapping("/deleteMember")
 	public int deleteMember(@RequestBody MemberInfoDTO memberInfoDTO,HttpSession session) {
 

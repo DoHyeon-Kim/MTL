@@ -112,7 +112,9 @@ import axios from 'axios'
 
 const firstDay = ref('')
 const secondDay = ref('')
-const titlesearch = ref(''  )
+const titlesearch = ref('')
+
+const bookList = ref<Book[]>([])
 
 interface Book {
   loanNo: number
@@ -125,8 +127,6 @@ interface Book {
   bookNumber: string
 }
 
-const bookList = ref<Book[]>([])
-
 //model
 import Button from 'primevue/button'
 import Dialog from 'primevue/dialog'
@@ -136,6 +136,7 @@ const visible = ref(false);
 const stars = ref(0)
 const review = ref('');
 
+const selectedBook = ref<MemberInfoBookDTO | null>(null)
 
 interface MemberInfoBookDTO {
   loanNo: number
@@ -147,8 +148,6 @@ interface MemberInfoBookDTO {
   bookImg: string
   bookNumber: string
 }
-
-const selectedBook = ref<MemberInfoBookDTO | null>(null)
 
 function openReview(book: MemberInfoBookDTO) {
   selectedBook.value = book
@@ -179,7 +178,7 @@ onMounted(async () => {
 })
 
 
-//select BookList
+//BookList検索
 async function getBookList() {
   const res = await axios.get(
     'http://localhost:8099/mypageBookList',
@@ -188,7 +187,7 @@ async function getBookList() {
         memberNo: loginMemberNo,
         firstDay: firstDay.value,
         secondDay: secondDay.value,
-        titlesearch : titlesearch.value
+        titlesearch: titlesearch.value
       },
       withCredentials: true
     }
@@ -197,6 +196,7 @@ async function getBookList() {
   bookList.value = res.data
 }
 
+//review 登録
 async function insertReview() {
   await axios.post("http://localhost:8099/review", {
     loanNo: selectedBook.value?.loanNo,
