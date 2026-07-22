@@ -16,6 +16,7 @@
         <p><strong>著者:</strong> {{ book.writer }}</p>
         <p><strong>出版社:</strong> {{ book.publisher }}</p>
         <p><strong>出版日:</strong> {{ book.publicationDate }}</p>
+        <p><strong>登録日:</strong> {{ book.registrationDate }}</p>
         <p><strong>カテゴリー:</strong> {{ book.category }}</p>
       </div>
     </div>
@@ -25,27 +26,47 @@
     </div>
 
     <div class="stock-section">
-      <h3>在庫 / レンタル状況</h3>
+      <div class="stock-actions">
+        <h3>在庫 / レンタル状況</h3>
+        <button
+          class="btn-delete"
+          v-if="selectedStockItems.length > 0"
+          @click="deleteSelectedStocks"
+        >
+          選択削除
+        </button>
+      </div>
+
       <table class="stock-table">
         <thead>
           <tr>
+            <th class="checkbox-col">
+              <input type="checkbox" :checked="isAllStockSelected" @change="selectAllStockItems" />
+            </th>
             <th>コピー番号</th>
             <th>ステータス</th>
             <th>借用者</th>
             <th>貸出日</th>
             <th>返却予定日</th>
+            <th>アクション</th>
           </tr>
         </thead>
         <tbody>
           <tr v-for="item in book.stockList" :key="item.bookNumberInfo">
+            <td class="checkbox-col">
+              <input type="checkbox" :value="item.bookNumber" v-model="selectedStockItems" />
+            </td>
             <td>{{ item.bookNumber }}</td>
             <td>{{ item.loanAvailable ? "貸出可能" : "貸出中" }}</td>
             <td>{{ item.nameH || "-" }}</td>
             <td>{{ item.loanDate || "-" }}</td>
             <td>{{ item.dueDate || "-" }}</td>
+            <td>
+              <button class="btn-delete" @click="deleteStock(item.bookNumber)">削除</button>
+            </td>
           </tr>
           <tr v-if="book.stockList.length === 0">
-            <td colspan="5" class="empty-row">在庫データがありません</td>
+            <td colspan="7" class="empty-row">在庫データがありません</td>
           </tr>
         </tbody>
       </table>
@@ -54,13 +75,14 @@
 </template>
 
 <script setup lang="ts">
-import { reactive, onMounted } from "vue";
+import { computed, reactive, ref, onMounted } from "vue";
 import { useRoute, useRouter } from "vue-router";
 import axios from "axios";
 
 const route = useRoute();
 const router = useRouter();
 const bookNumber = route.params.id as string;
+const selectedStockItems = ref<string[]>([]);
 
 const book = reactive({
   bookImg: "",
@@ -70,6 +92,7 @@ const book = reactive({
   category: "",
   bookContent: "",
   publicationDate: "",
+  registrationDate: "",
   stockList: [] as Array<{
     bookNumber: string;
     bookNumberInfo: string;
@@ -85,7 +108,6 @@ const fetchBook = async () => {
     const res = await axios.get(`http://localhost:8099/bookdetail/${bookNumber}`);
     const data = res.data;
 
-    console.log("Fetched book data:", data);
     book.bookImg = data.bookImg || data.imageUrl || data.image || "";
     book.bookTitle = data.bookTitle || "";
     book.writer = data.writer || "";
@@ -93,6 +115,7 @@ const fetchBook = async () => {
     book.category = data.category || "";
     book.bookContent = data.bookContent || "";
     book.publicationDate = data.publicationDate || "";
+    book.registrationDate = data.registrationDate || "";
 
     await fetchBookStock(data.bookNumberInfo);
   } catch (err) {
@@ -104,7 +127,6 @@ const fetchBookStock = async (infoNum: number | string) => {
     const res = await axios.get(`http://localhost:8099/bookdetail/${infoNum}/stock`);
     const data = res.data;
 
-    console.log("Fetched stock data:", data);
     book.stockList = Array.isArray(data)
       ? data.map(
           (item: {
@@ -124,6 +146,7 @@ const fetchBookStock = async (infoNum: number | string) => {
           }),
         )
       : [];
+    selectedStockItems.value = [];
   } catch (err) {
     console.error("在庫確認失敗:", err);
   }
@@ -132,6 +155,52 @@ const fetchBookStock = async (infoNum: number | string) => {
 onMounted(() => {
   if (bookNumber) fetchBook();
 });
+
+const isAllStockSelected = computed(
+  () => book.stockList.length > 0 && selectedStockItems.value.length === book.stockList.length,
+);
+
+const selectAllStockItems = () => {
+  if (isAllStockSelected.value) {
+    selectedStockItems.value = [];
+  } else {
+    selectedStockItems.value = book.stockList.map((item) => item.bookNumber);
+  }
+};
+
+const deleteStock = async (bookNumber: string) => {
+  if (!bookNumber) return;
+  if (!confirm("この在庫を削除してもよろしいですか？")) return;
+
+  try {
+    await axios.put(`http://localhost:8099/bookDeleteStock/${bookNumber}`);
+    book.stockList = book.stockList.filter((item) => item.bookNumber !== bookNumber);
+    selectedStockItems.value = selectedStockItems.value.filter((id) => id !== bookNumber);
+    alert("削除しました");
+  } catch (err) {
+    console.error(err);
+    alert("削除に失敗しました");
+  }
+};
+
+const deleteSelectedStocks = async () => {
+  if (selectedStockItems.value.length === 0) return;
+  if (!confirm(`${selectedStockItems.value.length}件の在庫を削除してもよろしいですか？`)) return;
+
+  try {
+    for (const bookNumber of selectedStockItems.value) {
+      await axios.put(`http://localhost:8099/bookDeleteStock/${bookNumber}`);
+    }
+    book.stockList = book.stockList.filter(
+      (item) => !selectedStockItems.value.includes(item.bookNumber),
+    );
+    selectedStockItems.value = [];
+    alert("削除しました");
+  } catch (err) {
+    console.error(err);
+    alert("削除に失敗しました");
+  }
+};
 
 const goBack = () => {
   const prevTitle = route.query.title as string | undefined;
@@ -143,7 +212,7 @@ const goBack = () => {
 };
 
 const goToEdit = () => {
-  router.push(`/admin/booklist/editbook/${bookNumber}`);
+  router.replace(`/admin/booklist/editbook/${bookNumber}`);
 };
 </script>
 

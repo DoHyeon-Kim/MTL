@@ -45,11 +45,6 @@
         </div>
 
         <div class="field">
-          <label>在庫数</label>
-          <input v-model="form.bookNumberInfo" type="number" />
-        </div>
-
-        <div class="field">
           <label>説明</label>
           <textarea v-model="form.bookContent" rows="4"></textarea>
         </div>
@@ -134,7 +129,6 @@ const loadBook = async () => {
 
 const submitForm = async () => {
   const formData = new FormData();
-
   const bookData = JSON.stringify({
     bookTitle: form.bookTitle,
     writer: form.writer,
@@ -143,6 +137,7 @@ const submitForm = async () => {
     bookContent: form.bookContent,
     publicationDate: form.publicationDate,
     bookNumberInfo: form.bookNumberInfo,
+    bookImg: form.bookImg,
   });
   formData.append("book", new Blob([bookData], { type: "application/json" }));
 
@@ -151,12 +146,12 @@ const submitForm = async () => {
   }
 
   try {
-    await axios.put(`http://localhost:8099/book/${bookId}`, formData, {
+    await axios.put(`http://localhost:8099/bookupdate/${bookId}`, formData, {
       headers: {
         "Content-Type": "multipart/form-data",
       },
     });
-    router.push("/admin/booklist");
+    router.replace(`/admin/booklist/detail/${bookId}`);
   } catch (err) {
     console.error(err);
     errorMessage.value = "更新に失敗しました";
