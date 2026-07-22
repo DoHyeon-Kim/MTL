@@ -7,20 +7,45 @@ PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
 <mapper namespace="com.library.loan.mapper.LoanMapper">
 
 <select id="selectLoanList" resultType="com.library.loan.dto.LoanDTO">
-	SELECT 
-		m.memberNo,
-		b.bookNumber,
-		b.bookTitle,
-		b.bookImg,
-		l.requeststate,
-		l.dueDate,
-		l.extension	
-	FROM loan l
-	JOIN member m
-		ON l.memberNo = m.memberNo
-	JOIN book b
-		ON l.bookNumber = b.bookNumber
-	WHERE requeststate IN (1, 2)
+    SELECT
+        l.loanNo,
+        l.bookNumber,
+        l.memberNo,
+        l.loanDate,
+        l.dueDate,
+        l.returnDate,
+        l.extension,
+        l.requeststate,
+        b.bookTitle,
+        b.Writer
+    FROM loan l
+    JOIN book b ON l.bookNumber = b.bookNumber
+    WHERE l.memberNo = #{memberNo}
+    <if test="state != null">
+        AND l.requeststate = #{state}
+    </if>
+    ORDER BY l.loanNo DESC
+</select>
+
+<select id="selectLoanList2" resultType="com.library.loan.dto.LoanDTO">
+    SELECT
+        l.loanNo,
+        l.bookNumber,
+        l.memberNo,
+        l.loanDate,
+        l.dueDate,
+        l.returnDate,
+        l.extension,
+        l.requeststate,
+        m.memberId,
+        b.bookTitle,
+        b.Writer
+    FROM loan l
+    JOIN book b ON l.bookNumber = b.bookNumber
+    JOIN member m On l.memberNo = m.memberNo
+    WHERE l.memberNo = #{memberNo}
+      AND l.requeststate IN (1,2, 3)
+    ORDER BY l.loanNo DESC
 </select>
 
 <insert id="insertLoan" parameterType="com.library.loan.dto.LoanDTO">
@@ -46,5 +71,40 @@ PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
     ORDER BY COUNT(*) DESC
     LIMIT 1
 </select>
+
+<update id="changeState">
+	UPDATE loan
+	SET requeststate = 3
+	WHERE loanNo = #{loanNo}
+		AND extension = true
+</update>
+
+<update id="checkLoan">
+	UPDATE loan
+	SET 
+	requeststate = 2,
+	loanDate = CURDATE(),
+    dueDate = DATE_ADD(CURDATE(), INTERVAL 7 DAY)
+	WHERE loanNo = #{loanNo}
+		AND requeststate = 1
+</update>
+
+<update id="extensionLoan">
+    UPDATE loan
+    SET 
+    requeststate = 2,
+    dueDate = DATE_ADD(dueDate, INTERVAL 7 DAY),
+    extension = false
+    WHERE loanNo = #{loanNo}
+      AND extension = true
+</update>
+
+<update id="returnLoan">
+	UPDATE loan
+	SET 
+	requeststate = 4,
+	returnDate = CURDATE()
+	WHERE loanNo = #{loanNo}
+</update>
 
 </mapper>

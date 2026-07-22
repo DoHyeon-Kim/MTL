@@ -22,15 +22,19 @@ public class CartController {
 
 	private final CartService cartService; 
 	
-	@GetMapping("/carts/{memberNo}")
+	@GetMapping("/user/carts/{memberNo}")
 	public List<CartDTO> getCartList(@PathVariable("memberNo") int memberNo) {
 		
 		return cartService.getCartList(memberNo);
 	}
 	
-
+	@PostMapping("/user/carts/{memberNo}/{bookNo}")
+	public void addCart(@PathVariable("memberNo") int memberNo,
+	                    @PathVariable("bookNo") int bookNo) {
+	    cartService.addCart(memberNo, bookNo);
+	}
 	
-	@DeleteMapping("/carts")
+	@DeleteMapping("/user/carts")
 	public void deleteCarts(@RequestBody int[] cartItemNos) {
 	    cartService.deleteCart(cartItemNos);
 	}

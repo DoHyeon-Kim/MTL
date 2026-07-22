@@ -4,7 +4,9 @@ import java.util.List;
 import com.library.loan.dto.LoanDTO;
 
 public interface LoanService {
-	List<LoanDTO> getLoanList(int memberNo);
+	public List<LoanDTO> getLoanList(int memberNo, Integer state);
 	
-    void createLoans(int memberNo, List<Integer> bookNumbers);
+	public void createLoans(int memberNo, List<Integer> bookNumbers);
+	
+	public void ChangeStatement(int loanNo,Integer state);
 }

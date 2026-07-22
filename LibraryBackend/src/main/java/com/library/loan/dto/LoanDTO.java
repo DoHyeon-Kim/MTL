@@ -10,6 +10,9 @@ public class LoanDTO {
 	private Integer loanNo;
     private Integer bookNumber;
     private Integer memberNo;
+    private String memberId;
+    private String bookTitle;
+    private String Writer;
     private LocalDate loanDate;
     private LocalDate dueDate;
     private LocalDate returnDate;

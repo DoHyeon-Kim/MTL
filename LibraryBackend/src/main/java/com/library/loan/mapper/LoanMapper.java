@@ -9,7 +9,11 @@ import org.apache.ibatis.annotations.Param;
 @Mapper
 public interface LoanMapper {
 
-	List<LoanDTO> selectLoanList(int memberNo);
+	List<LoanDTO> selectLoanList(@Param("memberNo") int memberNo,
+            @Param("state") Integer state);
+	
+	List<LoanDTO> selectLoanList2(@Param("memberNo") int memberNo,
+            @Param("state") Integer state);
 	
 	void insertLoan(LoanDTO loanDTO);
 	
@@ -18,5 +22,11 @@ public interface LoanMapper {
 	
     String selectTopCategory(int memberNo);
 
-	
-		}
+    int changeState(@Param("loanNo") int loanNo);
+    
+    void extensionLoan(@Param("loanNo") int loanNo);
+    
+    void checkLoan(@Param("loanNo") int loanNo);
+    
+    void returnLoan(@Param("loanNo") int loanNo);
+}

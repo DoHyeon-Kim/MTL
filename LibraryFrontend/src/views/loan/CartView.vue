@@ -1,83 +1,81 @@
 <script setup lang="ts">
-import { ref, onMounted } from 'vue'
-import { useRoute, useRouter } from 'vue-router'
-import axios from 'axios'
+import { ref, onMounted } from "vue";
+import { useRoute, useRouter } from "vue-router";
+import axios from "axios";
 
 interface CartItem {
-  bookNumber: number
-  cartItemNo: number
-  bookTitle: string
-  writer: string
-  loanAvailable: boolean
+  bookNumber: number;
+  cartItemNo: number;
+  bookTitle: string;
+  writer: string;
+  loanAvailable: boolean;
 }
 
-const router = useRouter()
-const route = useRoute()
-const memberNo = route.params.memberNo
-const PLACEHOLDER_IMAGE: string = '/images/books-media/list-view/book-media-01.jpg'
+const router = useRouter();
+const route = useRoute();
+const memberNo = route.params.memberNo;
+const PLACEHOLDER_IMAGE: string = "/images/books-media/list-view/book-media-01.jpg";
 
-const carts = ref<CartItem[]>([])
-const checkedItems = ref<number[]>([])
+const carts = ref<CartItem[]>([]);
+const checkedItems = ref<number[]>([]);
 
 onMounted(() => {
-  getCartData()
-})
+  getCartData();
+});
 
 async function getCartData() {
   try {
-    const res = await axios.get<CartItem[]>(`http://localhost:8099/carts/${memberNo}`)
-    carts.value = res.data
+    const res = await axios.get<CartItem[]>(`http://localhost:8099/user/carts/${memberNo}`);
+    carts.value = res.data;
   } catch (error) {
-    console.error('カートエラー:', error)
+    console.error("カートエラー:", error);
   }
 }
 
 async function deleteItems(ids: number[]) {
   if (ids.length === 0) {
-    alert('削除する項目を選択してください')
-    return
+    alert("削除する項目を選択してください");
+    return;
   }
   try {
-    await axios.delete('http://localhost:8099/carts', { data: ids })
-    checkedItems.value = []
-    getCartData()
+    await axios.delete("http://localhost:8099/user/carts", { data: ids });
+    checkedItems.value = [];
+    getCartData();
   } catch (error) {
-    console.error('削除失敗:', error)
-    alert('削除失敗')
+    console.error("削除失敗:", error);
+    alert("削除失敗");
   }
 }
 
 async function reserve(cartItemNos: number[]) {
   if (cartItemNos.length === 0) {
-    alert('予約する項目を選択してください')
-    return
+    alert("予約する項目を選択してください");
+    return;
   }
-  const targets = carts.value.filter(item =>
-    cartItemNos.includes(item.cartItemNo)
-  )
+  const targets = carts.value.filter((item) => cartItemNos.includes(item.cartItemNo));
   try {
     await axios.post(
-      `http://localhost:8099/loans/${memberNo}`,
-      targets.map(item => item.bookNumber)
-    )
-    deleteItems(cartItemNos)
+      ` ${memberNo}`,
+      targets.map((item) => item.bookNumber),
+    );
+    deleteItems(cartItemNos);
   } catch (error) {
-    console.error('予約失敗:', error)
-    alert('予約失敗' + error)
+    console.error("予約失敗:", error);
+    alert("予約失敗" + error);
   }
 }
 
 function selectAll() {
-  const availableItems = carts.value.filter(item => item.loanAvailable)
+  const availableItems = carts.value.filter((item) => item.loanAvailable);
 
   checkedItems.value =
     checkedItems.value.length === availableItems.length
       ? []
-      : availableItems.map(item => item.cartItemNo)
+      : availableItems.map((item) => item.cartItemNo);
 }
 
 function bookshosai(bookNumber: number) {
-  router.push(`/${bookNumber}`)
+  router.push(`/${bookNumber}`);
 }
 </script>
 
@@ -94,18 +92,12 @@ function bookshosai(bookNumber: number) {
 
           <template v-else>
             <div>
-              <button class="select-all" @click.stop="selectAll">
-                all select
-              </button>
+              <button class="select-all" @click.stop="selectAll">all select</button>
 
               <div class="select-devdel">
-                <button @click.stop="deleteItems(checkedItems)">
-                  select del
-                </button>
+                <button @click.stop="deleteItems(checkedItems)">select del</button>
 
-                <button @click.stop="reserve(checkedItems)">
-                  select rev
-                </button>
+                <button @click.stop="reserve(checkedItems)">select rev</button>
               </div>
             </div>
 
@@ -118,14 +110,18 @@ function bookshosai(bookNumber: number) {
               </thead>
 
               <tbody>
-                <tr v-for="item in carts" :key="item.cartItemNo" @click="bookshosai(item.bookNumber)">
+                <tr
+                  v-for="item in carts"
+                  :key="item.cartItemNo"
+                  @click="bookshosai(item.bookNumber)"
+                >
                   <td class="product-name">
                     <input
                       type="checkbox"
                       class="book-checkbox"
                       :value="item.cartItemNo"
                       v-model="checkedItems"
-                      style="margin-right: 15px;"
+                      style="margin-right: 15px"
                       :disabled="!item.loanAvailable"
                       @click.stop
                     />
@@ -133,7 +129,9 @@ function bookshosai(bookNumber: number) {
                       <img :src="PLACEHOLDER_IMAGE" :alt="item.bookTitle" />
                     </span>
                     <span class="product-detail">
-                      <span><strong>{{ item.bookTitle }}</strong></span>
+                      <span
+                        ><strong>{{ item.bookTitle }}</strong></span
+                      >
                       <span><strong>著者:</strong> {{ item.writer }}</span>
                     </span>
                   </td>
@@ -146,10 +144,7 @@ function bookshosai(bookNumber: number) {
                       予約
                     </button>
 
-                    <button
-                      @click.stop="deleteItems([item.cartItemNo])"
-                      style="margin-top: 10px;"
-                    >
+                    <button @click.stop="deleteItems([item.cartItemNo])" style="margin-top: 10px">
                       削除
                     </button>
                   </td>

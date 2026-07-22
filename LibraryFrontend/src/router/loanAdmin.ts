@@ -1,7 +1,7 @@
 export default [
   {
-    path: "/userMypage/:memberNo",
-    component: () => import("@/views/loan/LoanList.vue"),
+    path: "/adminMainPage",
+    component: () => import("@/views/loan/LoanAdmin.vue"),
     meta: {
       showMainHeader: true,
       sidebarType: null,

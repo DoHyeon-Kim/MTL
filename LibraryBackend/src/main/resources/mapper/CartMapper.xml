@@ -46,5 +46,10 @@ PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
       AND bookNumber = #{bookNumber}
 </select>
 
+<insert id="insertCart">
+    INSERT INTO cart (member_no, book_no, quantity)
+    VALUES (#{memberNo}, #{bookNo}, 1)
+    ON DUPLICATE KEY UPDATE quantity = quantity + 1
+</insert>
 
 </mapper>
