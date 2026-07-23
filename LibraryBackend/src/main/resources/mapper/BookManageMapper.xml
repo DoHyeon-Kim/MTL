@@ -38,7 +38,7 @@
 	</insert>
 
 	<!--図書詳細 -->
-	<select id="bookDetail" parameterType="Long"
+	<select id="bookManageDetail" parameterType="Long"
 		resultType="com.library.bookmanage.dto.BookManageDTO">
 
 		SELECT
@@ -102,7 +102,7 @@
 	</update>
 
 	<!--図書修正 -->
-	<update id="updateBook" parameterType="BookManageDTO">
+	<update id="updateManageBook">
 		UPDATE
 		book
 		SET

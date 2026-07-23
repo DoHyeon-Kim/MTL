@@ -7,7 +7,7 @@ import lombok.Data;
 @Data
 public class BookDTO {
 	private int bookNumber;
-	private int bookNumberInfo;
+	private Long bookNumberInfo;
 	private String bookImg;
 	private String bookTitle;
 	private String 	Writer;

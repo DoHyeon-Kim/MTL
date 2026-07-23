@@ -6,14 +6,12 @@ import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.PutMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RestController;
-import org.springframework.web.bind.annotation.CrossOrigin;
 
 import com.library.cart.dto.CartDTO;
 import com.library.cart.service.CartService;
-import java.util.Arrays;
+
 import lombok.RequiredArgsConstructor;
 
 @RestController
@@ -28,10 +26,10 @@ public class CartController {
 		return cartService.getCartList(memberNo);
 	}
 	
-	@PostMapping("/user/carts/{memberNo}/{bookNunmber}")
+	@PostMapping("/user/carts/{memberNo}/{bookNumber}")
 	public void addCart(@PathVariable("memberNo") int memberNo,
-	                    @PathVariable("bookNunmber") int bookNunmber) {
-	    cartService.addCart(memberNo, bookNunmber);
+	                    @PathVariable("bookNumber") int bookNumber) {
+	    cartService.addCart(memberNo, bookNumber);
 	}
 	
 	@DeleteMapping("/user/carts")

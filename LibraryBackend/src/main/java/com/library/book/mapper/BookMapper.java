@@ -12,7 +12,7 @@ public interface BookMapper {
 	
 	List<BookDTO>BookSearch(String Search);
 	
-	List<BookDTO>BookDetail(int bookNumberInfo);
+	List<BookDTO>BookDetail(Long bookNumberInfo);
 	
 	List<BookDTO>BookCategory();
 

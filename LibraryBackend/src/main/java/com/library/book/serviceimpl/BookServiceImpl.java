@@ -28,7 +28,7 @@ public class BookServiceImpl implements BookService{
 	}
 	
 	@Override
-	public List<BookDTO>BookDetail(int bookNumberInfo)
+	public List<BookDTO>BookDetail(Long bookNumberInfo)
 	{
 		return bookMapper.BookDetail(bookNumberInfo);
 	}

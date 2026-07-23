@@ -14,7 +14,7 @@ public interface BookManageMapper {
 	void createBook(BookManageDTO bookDTO);
 
 	//図書詳細
-	BookManageDTO bookDetail(BookManageDTO bookDTO);
+	BookManageDTO bookManageDetail(BookManageDTO bookManageDTO);
 
 	//図書在庫状態
 	List<BookLoanStatusDTO> bookStockList(Long bookNumberInfo);
@@ -23,7 +23,7 @@ public interface BookManageMapper {
 	void deleteBook(Long bookNumberInfo);
 
 	//図書修正
-	void updateBook(BookManageDTO bookDTO);
+	void updateManageBook(BookManageDTO BookManageDTO);
 
 	//図書リスト
 	List<BookManageDTO> bookList(String title);

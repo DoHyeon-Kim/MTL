@@ -7,6 +7,7 @@ import org.springframework.stereotype.Service;
 import com.library.cart.dto.CartDTO;
 import com.library.cart.mapper.CartMapper;
 import com.library.cart.service.CartService;
+
 import lombok.RequiredArgsConstructor;
 
 @Service
@@ -21,7 +22,7 @@ public class CartServiceImpl implements CartService{
 	}
 
 	 @Override
-	 public void addCart(int bookNumber, int memberNo) {
+	 public void addCart(int memberNo, int bookNumber) {
 	    cartMapper.insertCart(memberNo, bookNumber);
 	 }
 

@@ -11,7 +11,7 @@ public interface BookManageService {
 
 	public void createBook(BookManageDTO bookDTO);
 	
-	public BookManageDTO bookDetail(BookManageDTO bookDTO);
+	public BookManageDTO bookManageDetail(BookManageDTO bookManageDTO);
 
 	List<BookLoanStatusDTO> bookStockList(Long bookNumberInfo);
 	
@@ -19,7 +19,7 @@ public interface BookManageService {
 	
 	public void bookDeleteStock(int bookNumber);
 
-	void updateBook(String bookId, BookManageDTO bookDTO, MultipartFile imageFile);
+	void updateBook(String bookId, BookManageDTO BookManageDTO, MultipartFile imageFile);
 	
 	public List<BookManageDTO> bookList(String title);
 }

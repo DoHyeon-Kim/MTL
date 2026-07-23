@@ -30,7 +30,7 @@ public class BookController {
 	}
 	
 	@GetMapping("/bookdetail/{bookNumberInfo}")
-	public List<BookDTO>BookDetail(@PathVariable int bookNumberInfo) {
+	public List<BookDTO>BookDetail(@PathVariable Long bookNumberInfo) {
 		
 		return bookService.BookDetail(bookNumberInfo);
 	}

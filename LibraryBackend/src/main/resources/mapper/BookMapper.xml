@@ -28,7 +28,7 @@ PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
     </select>
     
           <select id="BookDetail"
-          	parameterType="int"
+          	parameterType="Long"
             resultType="com.library.book.dto.BookDTO">
             SELECT
             	bookNumber,

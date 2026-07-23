@@ -75,12 +75,12 @@ public class BookManageController {
 
 	//図書詳細
 	@GetMapping(value = "/bookmanagedetail/{bookNumberInfo}")
-	public ResponseEntity<BookManageDTO> getBookDetail(@PathVariable Long bookNumberInfo) {
+	public ResponseEntity<BookManageDTO> getBookManageDetail(@PathVariable Long bookNumberInfo) {
 
-		BookManageDTO bookDTO = new BookManageDTO();
-		bookDTO.setBookNumberInfo(bookNumberInfo);
+		BookManageDTO bookManageDTO = new BookManageDTO();
+		bookManageDTO.setBookNumberInfo(bookNumberInfo);
 
-		BookManageDTO result = bookManageService.bookDetail(bookDTO);
+		BookManageDTO result = bookManageService.bookManageDetail(bookManageDTO);
 		return ResponseEntity.ok(result);
 	}
 

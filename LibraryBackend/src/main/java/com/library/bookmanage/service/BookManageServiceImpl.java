@@ -28,8 +28,8 @@ public class BookManageServiceImpl implements BookManageService {
 
 	//図書詳細
 	@Override
-	public BookManageDTO bookDetail(BookManageDTO bookDTO) {
-		return bookManageMapper.bookDetail(bookDTO);
+	public BookManageDTO bookManageDetail(BookManageDTO bookManageDTO) {
+		return bookManageMapper.bookManageDetail(bookManageDTO);
 	}
 
 	//図書在庫状態
@@ -49,32 +49,29 @@ public class BookManageServiceImpl implements BookManageService {
 
 	//図書修正
 	@Override
-	public void updateBook(String bookId, BookManageDTO bookDTO, MultipartFile imageFile) {
+	public void updateBook(String bookId, BookManageDTO BookManageDTO, MultipartFile imageFile) {
 
 		String uploadDir = "C:/uploads/images/";
-
+		System.out.println(BookManageDTO);
+		System.out.println(imageFile);
 		if (imageFile != null && !imageFile.isEmpty()) {
 			String originalFileName = imageFile.getOriginalFilename();
 			String storedFileName = UUID.randomUUID().toString() + "_" + originalFileName;
-
 			File saveFile = new File(uploadDir + storedFileName);
 			if (!saveFile.getParentFile().exists()) {
 				saveFile.getParentFile().mkdirs();
 			}
 			try {
 				imageFile.transferTo(saveFile);
+				String imageUrl = "http://localhost:8099/uploads/" + storedFileName;
+				BookManageDTO.setBookImg(imageUrl);
 			} catch (IOException e) {
 				e.printStackTrace();
 				throw new RuntimeException("予期せぬエラーが発生しました.", e);
 			}
 
-			String imageUrl = "http://localhost:8099/uploads/" + storedFileName;
-
-			bookDTO.setBookImg(imageUrl);
-
-			bookManageMapper.updateBook(bookDTO);
-
 		}
+		bookManageMapper.updateManageBook(BookManageDTO);
 	}
 
 	//図書リスト
