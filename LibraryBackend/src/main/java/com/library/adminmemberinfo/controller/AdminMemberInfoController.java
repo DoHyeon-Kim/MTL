@@ -21,26 +21,26 @@ public class AdminMemberInfoController {
 	private final AdminMemberInfoService adminMemberInfoService;
 	
 	//会員ID修正検索
-	@GetMapping("/MemberInfoById")
+	@GetMapping("/admin/MemberInfoById")
 	public AdminMemberInfoDTO selectAdminMemberInfo(@RequestParam("memberId") String memberId) {
 
 	    return adminMemberInfoService.selectAdminMemberInfo(memberId);
 	}
 	
 	//会員検索
-	@GetMapping("/adminMemberList")
+	@GetMapping("/admin/adminMemberList")
 	public List<AdminMemberInfoDTO> adminMemberList(@RequestParam("memberId") String memberId,@RequestParam("memberStatus") String memberStatus) {
 		return adminMemberInfoService.adminMemberList(memberId,memberStatus);
 	}
 	
 	//会員退会
-	@DeleteMapping("/adminDeleteMember")
+	@DeleteMapping("/admin/adminDeleteMember")
 	public int adminDeleteMember(@RequestParam("memberNo") int memberNo) {
 		return adminMemberInfoService.adminDeleteMember(memberNo);
 	}
 	
 	//会員停止解除
-	@PutMapping("/releaseMember")
+	@PutMapping("/admin/releaseMember")
 	public int releaseMember(@RequestBody AdminMemberInfoDTO adminMemberInfoDTO) {
 		System.out.println(adminMemberInfoDTO);
 		return adminMemberInfoService.releaseMember(adminMemberInfoDTO);

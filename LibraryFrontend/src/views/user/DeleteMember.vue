@@ -48,7 +48,7 @@ async function deleteMember() {
 
   try {
     const res = await axios.delete(
-      'http://localhost:8099/deleteMember',
+      'http://localhost:8099/user/deleteMember',
       {
         data: {
           memberPw: password.value,

@@ -86,7 +86,7 @@ interface adminMemberList {
 
 
 async function selectMemberList() {
-  const res = await axios.get('http://localhost:8099/adminMemberList',
+  const res = await axios.get('http://localhost:8099/admin/adminMemberList',
     {
       params: {
         memberId: memberIdFind.value,
@@ -101,7 +101,7 @@ async function selectMemberList() {
 
 async function adminDeleteMember(memberNo: number) {
     await axios.delete(
-        'http://localhost:8099/adminDeleteMember',
+        'http://localhost:8099/admin/adminDeleteMember',
         {
             params: { memberNo },
             withCredentials: true
@@ -111,7 +111,7 @@ async function adminDeleteMember(memberNo: number) {
 
 async function releaseMember(memberNo:number){
     await axios.put(
-      'http://localhost:8099/releaseMember',{
+      'http://localhost:8099/admin/releaseMember',{
         memberNo:memberNo,
         memberStatus:'ACTIVE',
         etc : ''

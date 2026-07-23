@@ -22,5 +22,4 @@ public class MemberDTO {
 		  private String infoAdd;
 		  private String bookCount;
 		  
-
 }

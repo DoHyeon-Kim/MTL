@@ -18,18 +18,29 @@ public class SignUpViewController {
 		
 		//会員登録
 		@PostMapping("/sign")
-		public int memberSign(@RequestBody MemberDTO memberDTO,HttpSession session) {
-			
-			MemberDTO loginMember =	(MemberDTO) session.getAttribute("loginMember");
-			String loginRole = loginMember.getRole();
-			
-			if("ROLE_ADMIN".equals(loginRole)) {
-				return signUpViewService.memberSign(memberDTO);	
-			}else{
-				if ("ROLE_USER".equals(memberDTO.getRole())) {
-					return signUpViewService.memberSign(memberDTO);
-				}
-			}
-			return 0;
+		public int memberSign(
+		        @RequestBody MemberDTO memberDTO,
+		        HttpSession session) {
+
+		    System.out.println(memberDTO);
+
+		    MemberDTO loginMember =
+		            (MemberDTO) session.getAttribute("loginMember");
+
+
+		    if (loginMember != null
+		            && "ROLE_ADMIN".equals(loginMember.getRole())) {
+
+		        return signUpViewService.memberSign(memberDTO);
+		    }
+
+
+		    if (loginMember == null
+		            && "ROLE_USER".equals(memberDTO.getRole())) {
+
+		        return signUpViewService.memberSign(memberDTO);
+		    }
+
+		    return 0;
 		}
 }

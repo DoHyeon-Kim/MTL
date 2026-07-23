@@ -242,7 +242,7 @@ const insertMember = async () => {
     }else{
       if (response.data === 1) {
         alert('会員登録が完了しました。')
-        router.push('/home')
+        router.push('/login')
 
       } else if (response.data === 0) {
         alert('情報、URL 操作されました。')
@@ -262,7 +262,7 @@ const insertMember = async () => {
 }
 
 function returnpage() {
-  router.push('/home')
+  router.push('/bookList')
 }
 
 // 郵便番号

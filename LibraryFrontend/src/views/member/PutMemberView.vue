@@ -132,13 +132,13 @@ const isLoading = ref(false)
 
 
 
-//test
+
 
 import { useAuthStore } from '@/stores/auth'
 
 const auth = useAuthStore()
 
-//test fin
+
 
 const targetMemberNo = ref<number | null>(null)
 
@@ -159,7 +159,7 @@ onMounted(async () => {
     //ID
     if (route.params.memberId) {
       getres = await axios.get(
-        'http://localhost:8099/MemberInfoById',
+        'http://localhost:8099/admin/MemberInfoById',
         {
           params: {
             memberId: route.params.memberId
@@ -170,7 +170,7 @@ onMounted(async () => {
       targetMemberNo.value = getres.data.memberNo
       if (
         targetMemberNo.value == null ||
-        getres.data.role === 'ADMIN_BLOCK'
+        getres.data.memberId === 'ADMIN_BLOCK'
       ) {
         alert('ID検索ができません。')
         router.back()
@@ -179,7 +179,7 @@ onMounted(async () => {
       //No
     } else {
       getres = await axios.get(
-        'http://localhost:8099/MemberInfo',
+        'http://localhost:8099/user/MemberInfo',
         {
           params: {
             memberNo: auth.memberNo
@@ -253,7 +253,7 @@ const insertMember = async () => {
 
   try {
     const response = await axios.put(
-      'http://localhost:8099/MemberInfo',
+      'http://localhost:8099/member/MemberInfo',
       {
         memberId: memberId.value,
         memberNo: targetMemberNo.value,
@@ -266,7 +266,6 @@ const insertMember = async () => {
         infoAdd: memberDetailAddress.value,
       }
     )
-    // 아직 수정중..
     if (response.data === 1) {
       alert('会員登録が完了しました。')
       router.push('/userMypage')
@@ -283,7 +282,7 @@ const insertMember = async () => {
   }
 }
 
-// 아직 수정중..
+
 function returnpage() {
   router.push('/userMypage')
 }

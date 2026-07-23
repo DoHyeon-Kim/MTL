@@ -181,7 +181,7 @@ onMounted(async () => {
 //BookList検索
 async function getBookList() {
   const res = await axios.get(
-    'http://localhost:8099/mypageBookList',
+    'http://localhost:8099/user/mypageBookList',
     {
       params: {
         memberNo: loginMemberNo,
@@ -198,7 +198,7 @@ async function getBookList() {
 
 //review 登録
 async function insertReview() {
-  await axios.post("http://localhost:8099/review", {
+  await axios.post("http://localhost:8099/user/review", {
     loanNo: selectedBook.value?.loanNo,
     bookNumber: selectedBook.value?.bookNumber,
     memberNo: loginMemberNo,

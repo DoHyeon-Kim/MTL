@@ -29,13 +29,13 @@ public class MemberInfoController {
 	private final MemberInfoService memberInfoService;
 	
 	//会員情報検索
-	@GetMapping("/MemberInfo")
+	@GetMapping("/user/MemberInfo")
 	public MemberInfoDTO selectMemberInfo(@RequestParam("memberNo") int memberNo) {
 	    return memberInfoService.selectMemberInfo(memberNo);
 	}
 	
 	//会員情報修正
-	@PutMapping("/MemberInfo")
+	@PutMapping("/member/MemberInfo")
 	public int putMemberInfo(@RequestBody MemberInfoDTO memberInfoDTO ,HttpSession session) {
 		
 		MemberDTO loginMember =	(MemberDTO) session.getAttribute("loginMember");
@@ -45,7 +45,7 @@ public class MemberInfoController {
 	}
 	
 	//会員貸出情報
-	@GetMapping("/mypageBookList")
+	@GetMapping("/user/mypageBookList")
 	public List<MemberInfoBookDTO> selectMyPageBookList (@RequestParam("memberNo") int memberNo,
 	        @RequestParam("firstDay") LocalDate firstDay,
 	        @RequestParam("secondDay") LocalDate secondDay, 
@@ -57,13 +57,13 @@ public class MemberInfoController {
 	}
 	
 	//review登録
-	@PostMapping("/review")
+	@PostMapping("/user/review")
 	public int insertReview(@RequestBody ReviewDTO reviewDTO) {
 		return memberInfoService.insertReview(reviewDTO);
 	}
 	
 	//会員本人退会
-	@DeleteMapping("/deleteMember")
+	@DeleteMapping("/user/deleteMember")
 	public int deleteMember(@RequestBody MemberInfoDTO memberInfoDTO,HttpSession session) {
 
 		MemberDTO loginMember = (MemberDTO) session.getAttribute("loginMember");

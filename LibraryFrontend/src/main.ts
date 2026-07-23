@@ -22,10 +22,8 @@ app.use(PrimeVue, {
 
 //pinia
 app.use(createPinia())
-
 app.mount('#app')
 
 
-//test
 import axios from 'axios'
 axios.defaults.withCredentials = true
