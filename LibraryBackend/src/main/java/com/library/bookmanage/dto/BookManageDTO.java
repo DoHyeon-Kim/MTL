@@ -8,7 +8,7 @@ import com.fasterxml.jackson.annotation.JsonFormat;
 import lombok.Data;
 
 @Data
-public class BookDTO {
+public class BookManageDTO {
 
 	//図書リスト番号
 	private int bookNumber;

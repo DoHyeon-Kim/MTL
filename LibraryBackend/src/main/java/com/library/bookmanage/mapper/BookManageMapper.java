@@ -4,17 +4,17 @@ import java.util.List;
 
 import org.apache.ibatis.annotations.Mapper;
 
-import com.library.bookmanage.dto.BookDTO;
 import com.library.bookmanage.dto.BookLoanStatusDTO;
+import com.library.bookmanage.dto.BookManageDTO;
 
 @Mapper
 public interface BookManageMapper {
 
 	//図書登録
-	void createBook(BookDTO bookDTO);
+	void createBook(BookManageDTO bookDTO);
 
 	//図書詳細
-	BookDTO bookDetail(BookDTO bookDTO);
+	BookManageDTO bookDetail(BookManageDTO bookDTO);
 
 	//図書在庫状態
 	List<BookLoanStatusDTO> bookStockList(Long bookNumberInfo);
@@ -23,10 +23,10 @@ public interface BookManageMapper {
 	void deleteBook(Long bookNumberInfo);
 
 	//図書修正
-	void updateBook(BookDTO bookDTO);
+	void updateBook(BookManageDTO bookDTO);
 
 	//図書リスト
-	List<BookDTO> bookList(String title);
+	List<BookManageDTO> bookList(String title);
 	
 	//図書在庫削除
 	void bookDeleteStock(int BookNumber);

@@ -8,7 +8,7 @@
 
 	<!--図書登録 -->
 	<insert id="createBook"
-		parameterType="com.library.bookmanage.dto.BookDTO">
+		parameterType="com.library.bookmanage.dto.BookManageDTO">
 
 		INSERT INTO book
 		(
@@ -39,7 +39,7 @@
 
 	<!--図書詳細 -->
 	<select id="bookDetail" parameterType="Long"
-		resultType="com.library.bookmanage.dto.BookDTO">
+		resultType="com.library.bookmanage.dto.BookManageDTO">
 
 		SELECT
 		bookImg
@@ -102,7 +102,7 @@
 	</update>
 
 	<!--図書修正 -->
-	<update id="updateBook" parameterType="BookDTO">
+	<update id="updateBook" parameterType="BookManageDTO">
 		UPDATE
 		book
 		SET
@@ -121,7 +121,7 @@
 
 	<!--図書リスト -->
 	<select id="bookList" parameterType="String"
-		resultType="com.library.bookmanage.dto.BookDTO">
+		resultType="com.library.bookmanage.dto.BookManageDTO">
 
 		SELECT
 		MIN(bookNumber) AS bookNumber

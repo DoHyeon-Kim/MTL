@@ -9,7 +9,7 @@
 
 	<!--図書登録 -->
 	<insert id="insertbook"
-		parameterType="com.library.membermanage.dto.MemberDTO">
+		parameterType="com.library.membermanage.dto.MemberManageDTO">
 
 		INSERT INTO Book
 		(

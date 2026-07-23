@@ -8,8 +8,8 @@ import java.util.UUID;
 import org.springframework.stereotype.Service;
 import org.springframework.web.multipart.MultipartFile;
 
-import com.library.bookmanage.dto.BookDTO;
 import com.library.bookmanage.dto.BookLoanStatusDTO;
+import com.library.bookmanage.dto.BookManageDTO;
 import com.library.bookmanage.mapper.BookManageMapper;
 
 import lombok.RequiredArgsConstructor;
@@ -21,14 +21,14 @@ public class BookManageServiceImpl implements BookManageService {
 
 	//図書登録
 	@Override
-	public void createBook(BookDTO bookDTO) {
+	public void createBook(BookManageDTO bookDTO) {
 		bookManageMapper.createBook(bookDTO);
 
 	}
 
 	//図書詳細
 	@Override
-	public BookDTO bookDetail(BookDTO bookDTO) {
+	public BookManageDTO bookDetail(BookManageDTO bookDTO) {
 		return bookManageMapper.bookDetail(bookDTO);
 	}
 
@@ -49,7 +49,7 @@ public class BookManageServiceImpl implements BookManageService {
 
 	//図書修正
 	@Override
-	public void updateBook(String bookId, BookDTO bookDTO, MultipartFile imageFile) {
+	public void updateBook(String bookId, BookManageDTO bookDTO, MultipartFile imageFile) {
 
 		String uploadDir = "C:/uploads/images/";
 
@@ -79,7 +79,7 @@ public class BookManageServiceImpl implements BookManageService {
 
 	//図書リスト
 	@Override
-	public List<BookDTO> bookList(String title) {
+	public List<BookManageDTO> bookList(String title) {
 		return bookManageMapper.bookList(title);
 	}
 

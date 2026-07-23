@@ -3,7 +3,7 @@ package com.library.membermanage.dto;
 import lombok.Data;
 
 @Data
-public class MemberDTO {
+public class MemberManageDTO {
 
 	private Long memberNo;
 

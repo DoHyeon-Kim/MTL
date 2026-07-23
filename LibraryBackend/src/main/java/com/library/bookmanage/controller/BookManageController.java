@@ -18,21 +18,21 @@ import org.springframework.web.bind.annotation.RequestPart;
 import org.springframework.web.bind.annotation.RestController;
 import org.springframework.web.multipart.MultipartFile;
 
-import com.library.bookmanage.dto.BookDTO;
 import com.library.bookmanage.dto.BookLoanStatusDTO;
+import com.library.bookmanage.dto.BookManageDTO;
 import com.library.bookmanage.service.BookManageServiceImpl;
 
 import lombok.RequiredArgsConstructor;
 
 @RestController
 @RequiredArgsConstructor
-public class BookController {
+public class BookManageController {
 	private final BookManageServiceImpl bookManageService;
 
 	//図書登録
 	@PostMapping(value = "/bookcreate", consumes = { MediaType.MULTIPART_FORM_DATA_VALUE })
 	public void insertBook(
-			@RequestPart("book") BookDTO bookDTO,
+			@RequestPart("book") BookManageDTO bookDTO,
 			@RequestPart(value = "image", required = false) MultipartFile imageFile) {
 		String uploadDir = "C:/uploads/images/";
 
@@ -74,17 +74,17 @@ public class BookController {
 	}
 
 	//図書詳細
-	@GetMapping(value = "/bookdetail/{bookNumberInfo}")
-	public ResponseEntity<BookDTO> getBookDetail(@PathVariable Long bookNumberInfo) {
+	@GetMapping(value = "/bookmanagedetail/{bookNumberInfo}")
+	public ResponseEntity<BookManageDTO> getBookDetail(@PathVariable Long bookNumberInfo) {
 
-		BookDTO bookDTO = new BookDTO();
+		BookManageDTO bookDTO = new BookManageDTO();
 		bookDTO.setBookNumberInfo(bookNumberInfo);
 
-		BookDTO result = bookManageService.bookDetail(bookDTO);
+		BookManageDTO result = bookManageService.bookDetail(bookDTO);
 		return ResponseEntity.ok(result);
 	}
 
-	@GetMapping("/bookdetail/{bookNumberInfo}/stock")
+	@GetMapping("/bookmanagedetail/{bookNumberInfo}/stock")
 	public ResponseEntity<List<BookLoanStatusDTO>> getBookStock(@PathVariable Long bookNumberInfo) {
 
 		List<BookLoanStatusDTO> stockList = bookManageService.bookStockList(bookNumberInfo);
@@ -110,7 +110,7 @@ public class BookController {
 	@PutMapping(value = "/bookupdate/{bookId}", consumes = { MediaType.MULTIPART_FORM_DATA_VALUE })
 	public ResponseEntity<?> updateBook(
 			@PathVariable("bookId") String bookId,
-			@RequestPart("book") BookDTO bookDTO,
+			@RequestPart("book") BookManageDTO bookDTO,
 			@RequestPart(value = "image", required = false) MultipartFile imageFile) {
 
 		bookManageService.updateBook(bookId, bookDTO, imageFile);
@@ -119,8 +119,8 @@ public class BookController {
 	}
 
 	//図書リスト
-	@GetMapping("/booklist")
-	public List<BookDTO> bookList(@RequestParam(value = "title", required = false) String title) {
+	@GetMapping("/bookmanagelist")
+	public List<BookManageDTO> bookManageList(@RequestParam(value = "title", required = false) String title) {
 
 		return bookManageService.bookList(title);
 	}

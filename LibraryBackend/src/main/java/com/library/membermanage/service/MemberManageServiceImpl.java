@@ -2,7 +2,7 @@ package com.library.membermanage.service;
 
 import org.springframework.stereotype.Service;
 
-import com.library.bookmanage.dto.BookDTO;
+import com.library.bookmanage.dto.BookManageDTO;
 import com.library.membermanage.dto.MemberLoanStatusDTO;
 import com.library.membermanage.mapper.MemberManageMapper;
 
@@ -15,7 +15,7 @@ public class MemberManageServiceImpl implements MemberManageService {
 
 	//図書登録
 	@Override
-	public void createBook(BookDTO bookDTO) {
+	public void createBook(BookManageDTO bookDTO) {
 
 	}
 
@@ -28,7 +28,7 @@ public class MemberManageServiceImpl implements MemberManageService {
 
 	//図書修正
 	@Override
-	public void updateBook(BookDTO bookDTO) {
+	public void updateBook(BookManageDTO bookDTO) {
 		// TODO 自動生成されたメソッド・スタブ
 
 	}

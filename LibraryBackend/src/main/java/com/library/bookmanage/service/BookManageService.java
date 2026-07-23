@@ -4,14 +4,14 @@ import java.util.List;
 
 import org.springframework.web.multipart.MultipartFile;
 
-import com.library.bookmanage.dto.BookDTO;
 import com.library.bookmanage.dto.BookLoanStatusDTO;
+import com.library.bookmanage.dto.BookManageDTO;
 
 public interface BookManageService {
 
-	public void createBook(BookDTO bookDTO);
+	public void createBook(BookManageDTO bookDTO);
 	
-	public BookDTO bookDetail(BookDTO bookDTO);
+	public BookManageDTO bookDetail(BookManageDTO bookDTO);
 
 	List<BookLoanStatusDTO> bookStockList(Long bookNumberInfo);
 	
@@ -19,7 +19,7 @@ public interface BookManageService {
 	
 	public void bookDeleteStock(int bookNumber);
 
-	void updateBook(String bookId, BookDTO bookDTO, MultipartFile imageFile);
+	void updateBook(String bookId, BookManageDTO bookDTO, MultipartFile imageFile);
 	
-	public List<BookDTO> bookList(String title);
+	public List<BookManageDTO> bookList(String title);
 }
