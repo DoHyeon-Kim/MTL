@@ -24,12 +24,15 @@ import { ref } from 'vue'
 import axios from 'axios'
 import { useRouter } from 'vue-router'
 
-const router = useRouter()
 
+const router = useRouter()
 const password = ref('')
 const agreement = ref(false)
 
+
+
 async function deleteMember() {
+
   if (password.value === '') {
     alert('パスワードを入力してください。')
     return
@@ -43,11 +46,9 @@ async function deleteMember() {
     return
   }
 
-
-
   try {
     const res = await axios.delete(
-      'http://localhost:8099/deleteMember',
+      'http://localhost:8099/user/deleteMember',
       {
         data: {
           memberPw: password.value,
@@ -55,7 +56,6 @@ async function deleteMember() {
         withCredentials: true
       }
     )
-
     if (res.data === 1) {
       alert('退会が完了しました。')
       router.push('/home')

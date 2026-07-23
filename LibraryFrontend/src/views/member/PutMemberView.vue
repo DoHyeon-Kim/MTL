@@ -132,13 +132,14 @@ const isLoading = ref(false)
 
 
 
-//test
+
 
 import { useAuthStore } from '@/stores/auth'
 
 const auth = useAuthStore()
 
-//test fin
+
+
 const targetMemberNo = ref<number | null>(null)
 
 const isAdmin = computed(() => {
@@ -147,15 +148,18 @@ const isAdmin = computed(() => {
   )
 })
 
+
 onMounted(async () => {
   isLoading.value = true
 
   try {
     let getres
 
+    //アプローチ方法によって検索方法が変わる。
+    //ID
     if (route.params.memberId) {
       getres = await axios.get(
-        'http://localhost:8099/MemberInfoById',
+        'http://localhost:8099/admin/MemberInfoById',
         {
           params: {
             memberId: route.params.memberId
@@ -163,11 +167,19 @@ onMounted(async () => {
           withCredentials: true
         }
       )
-
       targetMemberNo.value = getres.data.memberNo
+      if (
+        targetMemberNo.value == null ||
+        getres.data.memberId === 'ADMIN_BLOCK'
+      ) {
+        alert('ID検索ができません。')
+        router.back()
+        return
+      }
+      //No
     } else {
       getres = await axios.get(
-        'http://localhost:8099/MemberInfo',
+        'http://localhost:8099/user/MemberInfo',
         {
           params: {
             memberNo: auth.memberNo
@@ -175,9 +187,9 @@ onMounted(async () => {
           withCredentials: true
         }
       )
-
       targetMemberNo.value = auth.memberNo
     }
+
     memberId.value = getres.data?.memberId ?? ''
     memberHiragana.value = getres.data?.nameH ?? ''
     memberKatakana.value = getres.data?.nameK ?? ''
@@ -187,6 +199,7 @@ onMounted(async () => {
     address.value = getres.data?.adds ?? ''
     memberDetailAddress.value = getres.data?.infoAdd ?? ''
 
+    //ID検索する時に初期の値段（select）
     if (route.params.memberId) {
       memberRole.value = getres.data?.role ?? 'ROLE_USER'
     } else {
@@ -204,7 +217,7 @@ onMounted(async () => {
 
 
 
-//put
+//修正
 const insertMember = async () => {
 
   // 必須項目の確認
@@ -240,7 +253,7 @@ const insertMember = async () => {
 
   try {
     const response = await axios.put(
-      'http://localhost:8099/MemberInfo',
+      'http://localhost:8099/member/MemberInfo',
       {
         memberId: memberId.value,
         memberNo: targetMemberNo.value,
@@ -253,7 +266,6 @@ const insertMember = async () => {
         infoAdd: memberDetailAddress.value,
       }
     )
-    // 아직 수정중..
     if (response.data === 1) {
       alert('会員登録が完了しました。')
       router.push('/userMypage')
@@ -270,7 +282,7 @@ const insertMember = async () => {
   }
 }
 
-// 아직 수정중..
+
 function returnpage() {
   router.push('/userMypage')
 }

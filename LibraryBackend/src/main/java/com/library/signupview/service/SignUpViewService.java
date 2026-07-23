@@ -4,6 +4,6 @@ import com.library.signupview.dto.MemberDTO;
 
 public interface SignUpViewService {
 
-		//登録
+		//会員登録
 		int memberSign (MemberDTO memberDTO);
 }

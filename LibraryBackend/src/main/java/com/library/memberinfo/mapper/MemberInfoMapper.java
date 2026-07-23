@@ -11,10 +11,10 @@ import com.library.memberinfo.DTO.ReviewDTO;
 
 public interface MemberInfoMapper {
 
-	//会員情報select
+	//会員情報検索
 	MemberInfoDTO selectMemberInfo(int memberNo);
 
-	//会員情報put
+	//会員情報修正
 	int putMemberInfo(MemberInfoDTO memberInfoDTO);
 	int putMember(MemberInfoDTO memberInfoDTO);
 	
@@ -32,7 +32,7 @@ public interface MemberInfoMapper {
 	//review登録
 	int insertReview(ReviewDTO reviewDTO);
 	
-	//member削除
+	//会員削除
 	String pwCheck(int memberNo);
 	
 	int deleteMember(int memberNo);

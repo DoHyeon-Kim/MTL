@@ -22,6 +22,52 @@ PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
 		             ON m.memberNo = mi.memberNo
 		WHERE m.memberId = #{memberId}
 	</select>
+	
+	
+	<select id="adminMemberList" resultType="AdminMemberInfoDTO">
+   	 	SELECT
+        	m.memberNo,
+        	m.memberId,
+        	m.memberStatus,
+        	m.role,
+        	mi.etc
+    	FROM member m join memberInfo mi on m.memberNo = mi.memberNo
+    <where>
+        role = 'ROLE_USER'
+
+        <if test="memberId != null and memberId != ''">
+            AND memberId = #{memberId}
+        </if>
+
+        <if test="memberStatus != null and memberStatus != ''">
+            AND memberStatus = #{memberStatus}
+        </if>
+    </where>
+	</select>
+	
+	
+	<delete id="adminDeleteMember">
+		DELETE FROM member
+        WHERE memberNo = #{memberNo};
+	</delete>
+	
+	<delete id="adminDeleteMemberInfo">
+		DELETE FROM memberinfo
+        WHERE memberNo = #{memberNo};
+	</delete>
+	
+	
+	<update id="releaseMember">
+ 	 UPDATE member
+     SET memberStatus = #{memberStatus}
+     WHERE memberNo = #{memberNo}
+	</update>
+	
+	<update id="releaseMemberInfo">
+	 UPDATE memberInfo
+     SET etc = #{etc}
+     WHERE memberNo = #{memberNo}
+	</update>
 
 
 </mapper>

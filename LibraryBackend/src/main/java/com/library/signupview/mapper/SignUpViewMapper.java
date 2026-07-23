@@ -4,13 +4,13 @@ import com.library.signupview.dto.MemberDTO;
 
 public interface SignUpViewMapper {
 
-	//登録
+	//会員登録
 	int memberSign(MemberDTO memberDTO);
 	int memberInfoSign(MemberDTO memberDTO);
 	
-	//select ID
+	//ID検索
 	int selectSignId(String memberId);
 	
-	//select Email
+	//Email検索
 	int selectSignEmail(String email);
 }

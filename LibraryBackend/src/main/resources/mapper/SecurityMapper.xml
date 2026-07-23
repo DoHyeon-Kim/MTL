@@ -1,0 +1,22 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper
+    PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+    "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+
+<mapper namespace="com.library.security.mapper.SecurityMapper">
+
+    <select id="selectLoginMember"
+            resultType="com.library.signupview.dto.MemberDTO">
+
+        SELECT
+            memberNo,
+            memberId,
+            memberPw,
+            role,
+            memberStatus
+        FROM member
+        WHERE memberId = #{memberId}
+
+    </select>
+
+</mapper>

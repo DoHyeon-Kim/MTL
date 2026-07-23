@@ -14,10 +14,10 @@ import com.library.memberinfo.DTO.MemberInfoBookDTO;
 
 public interface MemberInfoService {
 	
-	//会員情報select
+	//会員情報検索
 	MemberInfoDTO selectMemberInfo (int memberNo);
 
-	//会員情報put
+	//会員情報修正
 	int putMemberInfo (MemberInfoDTO memberInfoDTO ,String loginRole);
 	
 	//会員貸出情報
@@ -28,7 +28,7 @@ public interface MemberInfoService {
 	//review登録
 	int insertReview (ReviewDTO reviewDTO);
 	
-	//member削除
+	//会員退会
 	int deleteMember(int memberNo, String memberPw);
 	
 }

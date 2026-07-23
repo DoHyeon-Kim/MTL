@@ -21,6 +21,7 @@ PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
 		WHERE m.memberNo = #{memberNo}
 	</select>
 	
+	
 	<update id="putMember">
     	UPDATE member
     	SET
@@ -29,6 +30,7 @@ PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
         	memberNo = #{memberNo}
 
 	</update>
+
 
 	<update id="putMemberInfo">
 
@@ -43,6 +45,7 @@ PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
         memberNo = #{memberNo}
 	</update>
 	
+	
 	<update id="adminPutMember">
     	UPDATE member
     	SET
@@ -52,6 +55,7 @@ PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
         	memberNo = #{memberNo}
 
 	</update>
+
 
 	<update id="adminPutMemberInfo">
 
@@ -65,6 +69,7 @@ PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
     WHERE
         memberNo = #{memberNo}
 	</update>
+	
 	
 	<select id="selectMyPageBookList">
 	SELECT
@@ -85,6 +90,7 @@ PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
   			AND b.bookTitle LIKE CONCAT('%', #{titlesearch}, '%');
 	</select>
 	
+	
 	<insert id="insertReview">
 	INSERT INTO review (
         memberNo,
@@ -102,15 +108,18 @@ PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
     )
 	</insert>
 	
+	
 	<select id="pwCheck">
 		select memberPW
 		from member
 		where memberNo = #{memberNo};
 	</select>
 	
+	
 	<delete id="deleteMember">
 		DELETE FROM member
         WHERE memberNo = #{memberNo};
+        
 	</delete>
 		<delete id="deleteMemberinfo">
 		DELETE FROM memberinfo

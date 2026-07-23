@@ -21,4 +21,6 @@ public class AdminMemberInfoDTO {
 	  private String adds;
 	  private String infoAdd;
 	  private String bookCount;
+	  
+	  private String etc;
 }

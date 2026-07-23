@@ -6,7 +6,7 @@
         <li><a href="/userMypage">現在貸出履歴</a></li>
         <li><a href="/borrowHistory">貸出履歴</a></li>
         <li><a href="/userMypagePut">プロフィール修正</a></li>
-        <li><a href="/DeleteMember">脱退</a></li>
+        <li><a href="/DeleteMember">退会</a></li>
       </ul>
       <div class="clearfix"></div>
     </div>
