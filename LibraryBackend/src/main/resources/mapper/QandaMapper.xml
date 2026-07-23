@@ -1,0 +1,81 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper 
+    PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+    "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+
+<mapper namespace="com.library.qanda.mapper.QandaMapper">
+
+
+    <!-- Q&A一覧取得 -->
+    <select id="findAll" resultType="com.library.qanda.dto.QandaDTO">
+        SELECT
+            QandAno AS id,
+            question AS content,
+            answer AS answer,
+            createddate AS createdAt
+        FROM qanda
+        ORDER BY createddate DESC, QandAno DESC
+    </select>
+
+
+    <!-- Q&A詳細取得 -->
+    <select id="findById" resultType="com.library.qanda.dto.QandaDTO">
+        SELECT
+            QandAno AS id,
+            question AS content,
+            answer AS answer,
+            createddate AS createdAt
+        FROM qanda
+        WHERE QandAno = #{id}
+    </select>
+
+
+    <!-- 質問登録 -->
+    <insert id="insert"
+            parameterType="com.library.qanda.dto.QandaDTO"
+            useGeneratedKeys="true"
+            keyProperty="id">
+
+        INSERT INTO qanda (
+            question,
+            createddate
+        )
+        VALUES (
+            #{content},
+            NOW()
+        )
+
+    </insert>
+
+
+    <!-- 質問更新 -->
+    <update id="update"
+            parameterType="com.library.qanda.dto.QandaDTO">
+
+        UPDATE qanda
+        SET
+            question = #{content}
+        WHERE QandAno = #{id}
+
+    </update>
+
+
+    <!-- 回答登録 -->
+    <update id="updateAnswer">
+
+        UPDATE qanda
+        SET
+            answer = #{answer}
+        WHERE QandAno = #{id}
+
+    </update>
+
+
+    <!-- 削除 -->
+    <delete id="deleteById">
+        DELETE FROM qanda
+        WHERE QandAno = #{id}
+    </delete>
+
+
+</mapper>

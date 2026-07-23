@@ -1,0 +1,87 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper
+PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+"http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+
+<mapper namespace="com.library.announcement.mapper.AnnouncementMapper">
+
+    <resultMap id="AnnouncementResultMap"
+               type="com.library.announcement.dto.AnnouncementDTO">
+
+        <id property="id" column="announcementno"/>
+        <result property="title" column="title"/>
+        <result property="content" column="content"/>
+        <result property="createdAt" column="createddate"/>
+
+    </resultMap>
+
+    <!-- 一覧 -->
+    <select id="findAll" resultMap="AnnouncementResultMap">
+        SELECT
+            announcementno,
+            title,
+            content,
+            createddate
+        FROM announcement
+        ORDER BY createddate DESC, announcementno DESC
+    </select>
+
+    <!-- 詳細 -->
+    <select id="findById"
+            parameterType="java.lang.Long"
+            resultMap="AnnouncementResultMap">
+
+        SELECT
+            announcementno,
+            title,
+            content,
+            createddate
+        FROM announcement
+        WHERE announcementno = #{id}
+
+    </select>
+
+    <!-- 登録 -->
+    <insert id="insert"
+            parameterType="com.library.announcement.dto.AnnouncementDTO"
+            useGeneratedKeys="true"
+            keyProperty="id"
+            keyColumn="announcementno">
+
+        INSERT INTO announcement
+        (
+            title,
+            content,
+            createddate
+        )
+        VALUES
+        (
+            #{title},
+            #{content},
+            #{createdAt}
+        )
+
+    </insert>
+
+    <!-- 更新 -->
+    <update id="update"
+            parameterType="com.library.announcement.dto.AnnouncementDTO">
+
+        UPDATE announcement
+        SET
+            title=#{title},
+            content=#{content}
+        WHERE announcementno=#{id}
+
+    </update>
+
+    <!-- 削除 -->
+    <delete id="deleteById"
+            parameterType="java.lang.Long">
+
+        DELETE FROM announcement
+        WHERE announcementno=#{id}
+
+    </delete>
+
+</mapper>
