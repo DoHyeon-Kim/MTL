@@ -28,10 +28,10 @@ public class CartController {
 		return cartService.getCartList(memberNo);
 	}
 	
-	@PostMapping("/user/carts/{memberNo}/{bookNo}")
+	@PostMapping("/user/carts/{memberNo}/{bookNunmber}")
 	public void addCart(@PathVariable("memberNo") int memberNo,
-	                    @PathVariable("bookNo") int bookNo) {
-	    cartService.addCart(memberNo, bookNo);
+	                    @PathVariable("bookNunmber") int bookNunmber) {
+	    cartService.addCart(memberNo, bookNunmber);
 	}
 	
 	@DeleteMapping("/user/carts")
