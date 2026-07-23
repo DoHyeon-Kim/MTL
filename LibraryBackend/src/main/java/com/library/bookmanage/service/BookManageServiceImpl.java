@@ -10,33 +10,33 @@ import org.springframework.web.multipart.MultipartFile;
 
 import com.library.bookmanage.dto.BookDTO;
 import com.library.bookmanage.dto.BookLoanStatusDTO;
-import com.library.bookmanage.mapper.BookMapper;
+import com.library.bookmanage.mapper.BookManageMapper;
 
 import lombok.RequiredArgsConstructor;
 
 @Service
 @RequiredArgsConstructor
-public class BookServiceImpl implements BookService {
-	private final BookMapper bookMapper;
+public class BookManageServiceImpl implements BookManageService {
+	private final BookManageMapper bookManageMapper;
 
 	//図書登録
 	@Override
 	public void createBook(BookDTO bookDTO) {
-		bookMapper.createBook(bookDTO);
+		bookManageMapper.createBook(bookDTO);
 
 	}
 
 	//図書詳細
 	@Override
 	public BookDTO bookDetail(BookDTO bookDTO) {
-		return bookMapper.bookDetail(bookDTO);
+		return bookManageMapper.bookDetail(bookDTO);
 	}
 
 	//図書在庫状態
 	@Override
 	public List<BookLoanStatusDTO> bookStockList(Long bookNumberInfo) {
 
-		return bookMapper.bookStockList(bookNumberInfo);
+		return bookManageMapper.bookStockList(bookNumberInfo);
 
 	}
 
@@ -44,7 +44,7 @@ public class BookServiceImpl implements BookService {
 	@Override
 	public void deleteBook(Long bookNumberInfo) {
 
-		bookMapper.deleteBook(bookNumberInfo);
+		bookManageMapper.deleteBook(bookNumberInfo);
 	}
 
 	//図書修正
@@ -72,7 +72,7 @@ public class BookServiceImpl implements BookService {
 
 			bookDTO.setBookImg(imageUrl);
 
-			bookMapper.updateBook(bookDTO);
+			bookManageMapper.updateBook(bookDTO);
 
 		}
 	}
@@ -80,14 +80,14 @@ public class BookServiceImpl implements BookService {
 	//図書リスト
 	@Override
 	public List<BookDTO> bookList(String title) {
-		return bookMapper.bookList(title);
+		return bookManageMapper.bookList(title);
 	}
 
 	//図書在庫削除
 	@Override
 	public void bookDeleteStock(int bookNumber) {
 		
-		bookMapper.bookDeleteStock(bookNumber);
+		bookManageMapper.bookDeleteStock(bookNumber);
 	}
 
 }

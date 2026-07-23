@@ -1,0 +1,27 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<!DOCTYPE mapper
+PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+"https://mybatis.org/dtd/mybatis-3-mapper.dtd">
+
+<mapper namespace="com.library.adminmemberinfo.mapper.AdminMemberInfoMapper">
+
+	<select id="selectAdminMemberInfo" >
+		SELECT
+		    m.memberNo,
+    		m.memberId,
+    		mi.nameH,
+    		mi.nameK,
+    		mi.phone,
+    		mi.email,
+    		mi.addNumber,
+    		mi.adds,
+   		 	mi.infoAdd,
+   		 	m.role
+		FROM member m JOIN memberInfo mi 
+		             ON m.memberNo = mi.memberNo
+		WHERE m.memberId = #{memberId}
+	</select>
+
+
+</mapper>

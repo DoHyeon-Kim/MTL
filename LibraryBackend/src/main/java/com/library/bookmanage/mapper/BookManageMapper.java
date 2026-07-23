@@ -8,7 +8,7 @@ import com.library.bookmanage.dto.BookDTO;
 import com.library.bookmanage.dto.BookLoanStatusDTO;
 
 @Mapper
-public interface BookMapper {
+public interface BookManageMapper {
 
 	//図書登録
 	void createBook(BookDTO bookDTO);

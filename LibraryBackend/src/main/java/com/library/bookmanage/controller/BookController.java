@@ -20,14 +20,14 @@ import org.springframework.web.multipart.MultipartFile;
 
 import com.library.bookmanage.dto.BookDTO;
 import com.library.bookmanage.dto.BookLoanStatusDTO;
-import com.library.bookmanage.service.BookServiceImpl;
+import com.library.bookmanage.service.BookManageServiceImpl;
 
 import lombok.RequiredArgsConstructor;
 
 @RestController
 @RequiredArgsConstructor
 public class BookController {
-	private final BookServiceImpl bookService;
+	private final BookManageServiceImpl bookManageService;
 
 	//図書登録
 	@PostMapping(value = "/bookcreate", consumes = { MediaType.MULTIPART_FORM_DATA_VALUE })
@@ -68,7 +68,7 @@ public class BookController {
 
 			bookDTO.setBookNumberInfo(uniqueBase);
 
-			bookService.createBook(bookDTO);
+			bookManageService.createBook(bookDTO);
 		}
 
 	}
@@ -80,14 +80,14 @@ public class BookController {
 		BookDTO bookDTO = new BookDTO();
 		bookDTO.setBookNumberInfo(bookNumberInfo);
 
-		BookDTO result = bookService.bookDetail(bookDTO);
+		BookDTO result = bookManageService.bookDetail(bookDTO);
 		return ResponseEntity.ok(result);
 	}
 
 	@GetMapping("/bookdetail/{bookNumberInfo}/stock")
 	public ResponseEntity<List<BookLoanStatusDTO>> getBookStock(@PathVariable Long bookNumberInfo) {
 
-		List<BookLoanStatusDTO> stockList = bookService.bookStockList(bookNumberInfo);
+		List<BookLoanStatusDTO> stockList = bookManageService.bookStockList(bookNumberInfo);
 
 		return ResponseEntity.ok(stockList);
 	}
@@ -96,14 +96,14 @@ public class BookController {
 	@PutMapping("/bookdelete/{bookNumberInfo}")
 	public void deleteBook(
 			@PathVariable Long bookNumberInfo) {
-		bookService.deleteBook(bookNumberInfo);
+		bookManageService.deleteBook(bookNumberInfo);
 	}
 
 	//図書在庫削除
 	@PutMapping("/bookDeleteStock/{bookNumber}")
 	public void deleteBookStock(
 			@PathVariable int bookNumber) {
-		bookService.bookDeleteStock(bookNumber);
+		bookManageService.bookDeleteStock(bookNumber);
 	}
 
 	//図書修正
@@ -113,7 +113,7 @@ public class BookController {
 			@RequestPart("book") BookDTO bookDTO,
 			@RequestPart(value = "image", required = false) MultipartFile imageFile) {
 
-		bookService.updateBook(bookId, bookDTO, imageFile);
+		bookManageService.updateBook(bookId, bookDTO, imageFile);
 
 		return ResponseEntity.ok(bookDTO);
 	}
@@ -122,6 +122,6 @@ public class BookController {
 	@GetMapping("/booklist")
 	public List<BookDTO> bookList(@RequestParam(value = "title", required = false) String title) {
 
-		return bookService.bookList(title);
+		return bookManageService.bookList(title);
 	}
 }

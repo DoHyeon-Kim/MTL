@@ -7,7 +7,7 @@ import org.springframework.web.multipart.MultipartFile;
 import com.library.bookmanage.dto.BookDTO;
 import com.library.bookmanage.dto.BookLoanStatusDTO;
 
-public interface BookService {
+public interface BookManageService {
 
 	public void createBook(BookDTO bookDTO);
 	

@@ -1,0 +1,152 @@
+<?xml version="1.0" encoding="UTF-8"?>
+	
+	<!DOCTYPE mapper
+	PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+	"https://mybatis.org/dtd/mybatis-3-mapper.dtd">
+
+<mapper namespace="com.library.bookmanage.mapper.BookManageMapper">
+
+	<!--図書登録 -->
+	<insert id="createBook"
+		parameterType="com.library.bookmanage.dto.BookDTO">
+
+		INSERT INTO book
+		(
+		bookImg
+		, bookNumberInfo
+		, bookTitle
+		, Writer
+		, Publisher
+		, Category
+		, bookContent
+		, publicationDate
+		, registrationDate
+		)
+		VALUES
+		(
+		#{bookImg}
+		, #{bookNumberInfo}
+		, #{bookTitle}
+		, #{Writer}
+		, #{Publisher}
+		, #{Category}
+		, #{bookContent}
+		, #{publicationDate}
+		, now()
+		)
+
+	</insert>
+
+	<!--図書詳細 -->
+	<select id="bookDetail" parameterType="Long"
+		resultType="com.library.bookmanage.dto.BookDTO">
+
+		SELECT
+		bookImg
+		, bookTitle
+		, writer
+		, Publisher
+		, Category
+		, bookContent
+		, publicationDate
+		, registrationDate
+		, bookNumberInfo
+		FROM
+		book
+		WHERE
+		bookNumberInfo = #{bookNumberInfo}
+
+		LIMIT 1
+
+	</select>
+
+	<!--図書在庫状態 -->
+	<select id="bookStockList" parameterType="Long"
+		resultType="com.library.bookmanage.dto.BookLoanStatusDTO">
+
+		SELECT
+		b.bookNumber
+		, b.bookNumberInfo
+		, b.loanAvailable
+		, mi.nameH
+		, l.loanDate
+		, l.dueDate
+		FROM
+		book b
+		LEFT JOIN
+		loan l
+		ON
+		b.bookNumber = l.bookNumber
+		AND l.returnDate IS NULL
+		LEFT JOIN
+		memberinfo mi
+		ON
+		l.memberNo = mi.memberNo
+		WHERE
+		b.bookNumberInfo =
+		#{bookNumberInfo}
+		AND
+		skj_Flg = '0'
+		ORDER BY
+		b.bookNumber ASC
+	</select>
+	
+	<!--図書削除 -->
+	<update id="deleteBook" parameterType="Long">
+    UPDATE 
+    book 
+    SET 
+    skj_Flg = 1
+    WHERE 
+    bookNumberInfo = #{bookNumberInfo}
+	</update>
+
+	<!--図書修正 -->
+	<update id="updateBook" parameterType="BookDTO">
+		UPDATE
+		book
+		SET
+		bookImg = #{bookImg}
+		, bookTitle = #{bookTitle}
+		, Writer = #{Writer}
+		, Publisher = #{Publisher}
+		, Category = #{Category}
+		, bookContent = #{bookContent}
+		, publicationDate = #{publicationDate}
+		, registrationDate = #{registrationDate}
+		WHERE
+		bookNumberInfo = #{bookNumberInfo}
+
+	</update>
+
+	<!--図書リスト -->
+	<select id="bookList" parameterType="String"
+		resultType="com.library.bookmanage.dto.BookDTO">
+
+		SELECT
+		MIN(bookNumber) AS bookNumber
+		,MIN(bookTitle) AS bookTitle
+		,MIN(writer) AS writer
+		,MIN(publicationDate) AS publicationDate
+		,MIN(registrationDate) AS registrationDate
+		, bookNumberInfo
+		FROM
+		book
+		WHERE
+		bookTitle = #{title}
+		AND
+		skj_Flg = '0'
+		GROUP BY
+		bookNumberInfo
+	</select>
+
+	<!--図書在庫削除 -->
+	<update id="bookDeleteStock" parameterType="int">
+	    UPDATE 
+		book 
+		SET 
+		skj_Flg = 1
+		WHERE 
+		bookNumber = #{bookNumber}
+	</update>
+</mapper>
