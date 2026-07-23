@@ -5,6 +5,9 @@ import { managementRoutes } from "./management";
 import member from "./member";
 import user from "./user";
 import admin from "./admin";
+import cart from "./cart";
+import loanMember from "./loanMember";
+import loanAdmin from "./loanAdmin";
 
 const router = createRouter({
   history: createWebHistory(import.meta.env.BASE_URL),
@@ -15,7 +18,10 @@ const router = createRouter({
     ...member,
     ...user,
     ...admin,
-	...member, ...cart, ...loanMember
+    ...member,
+    ...cart,
+    ...loanMember,
+    ...loanAdmin,
     {
       path: "/announcement",
       name: "announcement-list",
