@@ -15,6 +15,7 @@ const router = createRouter({
     ...member,
     ...user,
     ...admin,
+	...member, ...cart, ...loanMember
     {
       path: "/announcement",
       name: "announcement-list",
