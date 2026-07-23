@@ -3,48 +3,36 @@ import BookList from "@/views/book/bookList.vue";
 
 export default [
 
-  /*{
-    path: '/signup',
-    component: () => import('@/views/member/SignUpView.vue'),
-    meta: {
-      showMainHeader: true,
-      showMainSidebar: false,
-      showMainFooter: true,
-    },
-  },*/
   {
     path: '/booklist',
     component: BookList,
     
     meta: {
       showMainHeader: true,
-      showMainSidebar: false,
+      sidebarType: 'book',
       showMainFooter: true,
-      showbookSidebar:true,
     },
   },
 
-  /*{
-    path: '/booklist/:Search',
+{
+    path: '/booklist/search/:Search',
     component: BookList,
     
     meta: {
       showMainHeader: true,
-      showMainSidebar: false,
+      sidebarType: 'book',
       showMainFooter: true,
-      showbookSidebar:true,
     },
-  },*/
+  },
 
     {
-    path: '/booklist/:category',
+    path: '/booklist/category/:category',
     component: BookList,
     
     meta: {
       showMainHeader: true,
-      showMainSidebar: false,
+      sidebarType: 'book',
       showMainFooter: true,
-      showbookSidebar:true,
     },
   },
 
@@ -54,9 +42,7 @@ export default [
     
     meta: {
       showMainHeader: true,
-      showMainSidebar: false,
       showMainFooter: true,
-      showbookSidebar:false,
     },
   },
 ]
