@@ -8,10 +8,57 @@ PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
 
       <select id="BookList"
             resultType="com.library.book.dto.BookDTO">
-            SELECT bookNumber,
-            bookTitle
-            from book
-            
-
+            SELECT
+            	bookNumber,
+            	bookNumberInfo,
+            	bookTitle,
+            	Category
+            	FROM book
+    </select>
+    
+          <select id="BookSearch"
+          	parameterType="string"
+            resultType="com.library.book.dto.BookDTO">
+            SELECT
+            	bookNumber,
+            	bookNumberInfo,
+            	bookTitle
+            	FROM book
+            WHERE bookTitle LIKE CONCAT('%', #{Search}, '%')
+    </select>
+    
+          <select id="BookDetail"
+          	parameterType="int"
+            resultType="com.library.book.dto.BookDTO">
+            SELECT
+            	bookNumber,
+            	bookNumberInfo,
+            	bookImg,
+            	bookTitle,
+            	Writer,
+            	Publisher,
+            	Category,
+            	bookContent,
+            	loanAvailable
+            FROM book
+            WHERE bookNumberInfo = #{bookNumberInfo}
+    </select>
+    
+          <select id="BookCategory"
+            resultType="com.library.book.dto.BookDTO">
+            SELECT 
+            	DISTINCT Category
+            FROM book;
+    </select>
+    
+          <select id="CategoryList"
+          	parameterType="string"
+            resultType="com.library.book.dto.BookDTO">
+            SELECT 
+				bookNumber,
+            	bookNumberInfo,
+            	bookTitle
+            FROM book
+            WHERE Category = #{category}
     </select>
 </mapper>

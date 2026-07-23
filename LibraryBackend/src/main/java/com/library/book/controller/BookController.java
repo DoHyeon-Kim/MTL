@@ -23,7 +23,7 @@ public class BookController {
 		return bookService.BookList();
 	}
 	
-	@GetMapping("/booklist/{Search}")
+	@GetMapping("/booklist/search/{Search}")
 	public List<BookDTO>BookSearch(@PathVariable String Search) {
 		
 		return bookService.BookSearch(Search);
@@ -41,7 +41,7 @@ public class BookController {
 		return bookService.BookCategory();
 	}
 	
-	@GetMapping("/booklist/{category}")
+	@GetMapping("/booklist/category/{category}")
 	public List<BookDTO>CategoryList(@PathVariable String category)
 	{
 		return bookService.CategoryList(category);
