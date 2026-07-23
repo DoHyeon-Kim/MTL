@@ -7,6 +7,7 @@
         <AdminSidebar v-if="sidebarType === 'admin'" />
         <UserSidebar v-else-if="sidebarType === 'user'" />
         <SubAdminSidebar v-else-if="sidebarType === 'subadmin'" />
+        <BookSidebar v-else-if="sidebarType === 'book'" />
       </div>
 
       <main class="main-content" :class="sidebarType ? 'col-md-9' : 'col-md-12'">
@@ -27,6 +28,7 @@ import MainFooter from '@/components/MainFooter.vue'
 import AdminSidebar from '@/components/AdminSidebar.vue'
 import UserSidebar from '@/components/UserSidebar.vue'
 import SubAdminSidebar from './components/SubAdminSiderbar.vue'
+import BookSidebar from "@/components/bookSidebar.vue";
 
 const route = useRoute()
 

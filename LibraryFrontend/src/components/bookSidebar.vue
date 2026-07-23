@@ -17,7 +17,7 @@ async function getCategory() {
 }
 
 function moveCategory(category: string) {
-  router.push(`/booklist/${encodeURIComponent(category)}`);
+  router.push(`/booklist/category/${encodeURIComponent(category)}`);
 }
 
 onMounted(() => {

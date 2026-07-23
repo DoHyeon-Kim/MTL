@@ -21,7 +21,7 @@ async function getData() {
 
 async function searchData() {
   const res = await axios.get<Book[]>(
-    `http://localhost:8099/booklist/${Search.value}`
+    `http://localhost:8099/booklist/search/${Search.value}`
   );
   book.value = res.data;
 }
@@ -85,6 +85,7 @@ onMounted(() => {
 <style scoped>
 .content {
   width: 100%;
+  min-width: 0;
 }
 
 #search {
