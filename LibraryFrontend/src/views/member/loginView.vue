@@ -89,8 +89,10 @@
 import { ref } from 'vue'
 import axios from 'axios'
 import { useRouter } from 'vue-router'
+import { useAuthStore } from '@/stores/auth'
 
 const router = useRouter()
+const auth = useAuthStore()
 
 const memberId = ref('')
 const memberPw = ref('')
@@ -98,7 +100,7 @@ const message = ref('')
 
 async function login() {
   try {
-    await axios.post(
+     const res = await axios.post(
       'http://localhost:8099/login',
       {
         memberId: memberId.value,
@@ -109,6 +111,9 @@ async function login() {
       }
     )
 
+    auth.memberNo = res.data.memberNo
+    auth.memberId = res.data.memberId
+    auth.role = res.data.role
 
     message.value = ''
     alert('login完了')
