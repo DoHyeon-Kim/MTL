@@ -50,10 +50,14 @@
                           <span>|</span>
                           <a href="#" @click.prevent="logout">Logout</a>
                         </template>
-                        <a data-toggle="dropdown" class="dropdown-toggle" :href="`/carts/${auth.memberNo}`"
+
+
+                        <a v-if="!isAdmin" data-toggle="dropdown" class="dropdown-toggle" :href="`/carts/${auth.memberNo}`"
                           style="margin-left: 10px;">
                           <i class="fa fa-shopping-cart"></i>
                         </a>
+
+
                       </div>
                     </div>
                   </div>
@@ -97,7 +101,7 @@ async function logout() {
 
     await router.push("/login");
   } catch (error) {
-    console.error("로그아웃 실패:", error);
+    console.error(error);
   }
 }
 </script>

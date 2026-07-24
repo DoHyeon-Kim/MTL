@@ -25,61 +25,44 @@ import lombok.RequiredArgsConstructor;
 @RequiredArgsConstructor
 public class LoginController {
 
-    private final AuthenticationManager authenticationManager;
+	private final AuthenticationManager authenticationManager;
 
-    @PostMapping("/login")
-    public ResponseEntity<?> login(
-            @RequestBody MemberDTO memberDTO,
-            HttpServletRequest request) {
-    	
-    	Authentication authentication;
+	@PostMapping("/login")
+	public ResponseEntity<?> login(@RequestBody MemberDTO memberDTO, HttpServletRequest request) {
 
-    	try {
-    	    authentication =
-    	        authenticationManager.authenticate(
-    	            new UsernamePasswordAuthenticationToken(
-    	                memberDTO.getMemberId(),
-    	                memberDTO.getMemberPw()
-    	            )
-    	        );
-    	} catch (Exception e) {
-    	    e.printStackTrace();
+		Authentication authentication;
 
-    	    return ResponseEntity
-    	            .status(401)
-    	            .body("IDまだはPW.IDまたはpwが異なります。");
-    	}
-    	
-        SecurityContext context =
-                SecurityContextHolder.createEmptyContext();
+		try {
+			authentication = authenticationManager.authenticate(
+					new UsernamePasswordAuthenticationToken(memberDTO.getMemberId(), memberDTO.getMemberPw()));
+		} catch (Exception e) {
+			e.printStackTrace();
 
-        context.setAuthentication(authentication);
-        SecurityContextHolder.setContext(context);
+			return ResponseEntity.status(401).body("IDまだはPW.IDまたはpwが異なります。");
+		}
 
-        HttpSession session = request.getSession(true);
-        session.setAttribute(
-                "SPRING_SECURITY_CONTEXT",
-                context
-        );
+		SecurityContext context = SecurityContextHolder.createEmptyContext();
 
-        CustomUserDetails user =
-                (CustomUserDetails) authentication.getPrincipal();
+		context.setAuthentication(authentication);
+		SecurityContextHolder.setContext(context);
 
-        session.setAttribute(
-                "loginMember",
-                user.getMember()
-        );
+		HttpSession session = request.getSession(true);
+		session.setAttribute("SPRING_SECURITY_CONTEXT", context);
 
-        Map<String, Object> result = new HashMap<>();
-        result.put("memberNo", user.getMember().getMemberNo());
-        result.put("memberId", user.getMember().getMemberId());
-        result.put("role", user.getMember().getRole());
+		CustomUserDetails user = (CustomUserDetails) authentication.getPrincipal();
 
-        return ResponseEntity.ok(result);
-    }
+		session.setAttribute("loginMember", user.getMember());
 
-    @GetMapping("/session")
-    public MemberDTO session(HttpSession session) {
-        return (MemberDTO) session.getAttribute("loginMember");
-    }
-}	
+		Map<String, Object> result = new HashMap<>();
+		result.put("memberNo", user.getMember().getMemberNo());
+		result.put("memberId", user.getMember().getMemberId());
+		result.put("role", user.getMember().getRole());
+
+		return ResponseEntity.ok(result);
+	}
+
+	@GetMapping("/session")
+	public MemberDTO session(HttpSession session) {
+		return (MemberDTO) session.getAttribute("loginMember");
+	}
+}
