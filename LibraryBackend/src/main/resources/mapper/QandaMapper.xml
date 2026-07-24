@@ -37,10 +37,12 @@
             keyProperty="id">
 
         INSERT INTO qanda (
+        	memberNo,
             question,
             createddate
         )
         VALUES (
+        	1,
             #{content},
             NOW()
         )

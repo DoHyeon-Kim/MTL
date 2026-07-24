@@ -9,11 +9,14 @@ PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
       <select id="BookList"
             resultType="com.library.book.dto.BookDTO">
             SELECT
-            	bookNumber,
+            	MAX(bookImg) AS bookImg,
+            	MAX(bookNumber) AS bookNumber,
             	bookNumberInfo,
-            	bookTitle,
-            	Category
+            	MAX(bookTitle) AS bookTitle,
+            	MAX(Category) AS Category
             	FROM book
+            	WHERE skj_Flg = 0
+            	GROUP BY bookNumberInfo
     </select>
     
           <select id="BookSearch"

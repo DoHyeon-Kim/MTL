@@ -52,8 +52,6 @@ public class BookManageServiceImpl implements BookManageService {
 	public void updateBook(String bookId, BookManageDTO BookManageDTO, MultipartFile imageFile) {
 
 		String uploadDir = "C:/uploads/images/";
-		System.out.println(BookManageDTO);
-		System.out.println(imageFile);
 		if (imageFile != null && !imageFile.isEmpty()) {
 			String originalFileName = imageFile.getOriginalFilename();
 			String storedFileName = UUID.randomUUID().toString() + "_" + originalFileName;
@@ -83,7 +81,7 @@ public class BookManageServiceImpl implements BookManageService {
 	//図書在庫削除
 	@Override
 	public void bookDeleteStock(int bookNumber) {
-		
+
 		bookManageMapper.bookDeleteStock(bookNumber);
 	}
 
