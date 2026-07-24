@@ -27,9 +27,8 @@
                     <div class="topbar-info">
                       <a href="tel:+03-5829-6357"><i class="fa fa-phone"></i>+03-5829-6357</a>
                       <span>/</span>
-                      <a href="mailto:support@mountain-info.com"
-                        ><i class="fa fa-envelope"></i>support@mountain-info.com</a
-                      >
+                      <a href="mailto:support@mountain-info.com"><i
+                          class="fa fa-envelope"></i>support@mountain-info.com</a>
                     </div>
                   </div>
                   <div class="col-sm-6">
@@ -40,21 +39,19 @@
                         </RouterLink>
 
                         <template v-else>
-                          <RouterLink
-                            :to="`/userMypage/${auth.memberNo}`"
-                            style="margin-right: 10px"
-                            >MyPage</RouterLink
-                          >
+                          <RouterLink v-if="!isAdmin" :to="`/userMypage/${auth.memberNo}`">
+                            MyPage
+                          </RouterLink>
 
-                          <RouterLink to="/adminMainPage">MyPage</RouterLink>
+                          <RouterLink v-else to="/adminMainPage">
+                            MyPage
+                          </RouterLink>
+
                           <span>|</span>
                           <a href="#" @click.prevent="logout">Logout</a>
                         </template>
-                        <a
-                          data-toggle="dropdown"
-                          class="dropdown-toggle"
-                          :href="`/carts/${auth.memberNo}`"
-                        >
+                        <a data-toggle="dropdown" class="dropdown-toggle" :href="`/carts/${auth.memberNo}`"
+                          style="margin-left: 10px;">
                           <i class="fa fa-shopping-cart"></i>
                         </a>
                       </div>
@@ -86,6 +83,9 @@ const auth = useAuthStore();
 const router = useRouter();
 
 const isLogin = computed(() => auth.memberNo > 0);
+const isAdmin = computed(() => {
+  return auth.role === "ROLE_ADMIN" || auth.role === "ROLE_SUBADMIN";
+});
 
 async function logout() {
   try {
