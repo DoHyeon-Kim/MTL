@@ -6,7 +6,7 @@ PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
 
 <mapper namespace="com.library.loan.mapper.LoanMapper">
 
-<select id="selectLoanList" resultType="com.library.loan.dto.LoanDTO">
+<select id="selectLoanListMember" resultType="com.library.loan.dto.LoanDTO">
     SELECT
         l.loanNo,
         l.bookNumber,
@@ -27,7 +27,7 @@ PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
     ORDER BY l.loanNo DESC
 </select>
 
-<select id="selectLoanList2" resultType="com.library.loan.dto.LoanDTO">
+<select id="selectLoanListAdmin" resultType="com.library.loan.dto.LoanDTO">
     SELECT
         l.loanNo,
         l.bookNumber,
@@ -39,12 +39,12 @@ PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
         l.requeststate,
         m.memberId,
         b.bookTitle,
-        b.Writer
+        b.Writer AS writer
     FROM loan l
     JOIN book b ON l.bookNumber = b.bookNumber
-    JOIN member m On l.memberNo = m.memberNo
-    WHERE l.memberNo = #{memberNo}
-      AND l.requeststate IN (1,2, 3)
+    JOIN member m ON l.memberNo = m.memberNo
+    WHERE m.memberId = #{memberId}
+      AND l.requeststate IN (1, 2, 3)
     ORDER BY l.loanNo DESC
 </select>
 

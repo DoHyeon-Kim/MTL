@@ -17,8 +17,10 @@ public class LoanServiceImpl implements LoanService{
 	
 	@Override
 	public List<LoanDTO> getLoanList(int memberNo, Integer state) {
-		if(state ==1) return loanMapper.selectLoanList2(memberNo, state);
-		else return loanMapper.selectLoanList(memberNo, state);
+		if(state ==1) return loanMapper.selectLoanListAdmin(memberNo, state); // admin page check
+		else if (state ==2) loanMapper.selectLoanListMember(memberNo, state);   // user page check
+		
+	    return List.of();
 
 	}
 	
