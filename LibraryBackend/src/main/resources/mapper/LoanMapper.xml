@@ -21,9 +21,7 @@ PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
     FROM loan l
     JOIN book b ON l.bookNumber = b.bookNumber
     WHERE l.memberNo = #{memberNo}
-    <if test="state != null">
-        AND l.requeststate = #{state}
-    </if>
+      AND l.requeststate = 2
     ORDER BY l.loanNo DESC
 </select>
 

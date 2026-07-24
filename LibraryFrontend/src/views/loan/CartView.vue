@@ -58,7 +58,7 @@ async function reserve(cartItemNos: number[]) {
   const targets = carts.value.filter((item) => cartItemNos.includes(item.cartItemNo));
   try {
     await axios.post(
-      ` ${memberNo}`,
+      ` http://localhost:8099/user/loans/${memberNo}`,
       targets.map((item) => item.bookNumber),
     );
     deleteItems(cartItemNos);
