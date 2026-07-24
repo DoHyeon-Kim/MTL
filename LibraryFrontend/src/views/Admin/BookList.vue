@@ -78,16 +78,16 @@ const searchPerformed = ref(false);
 const errorMessage = ref("");
 
 const createBook = () => {
-  router.push("/admin/booklist/createbook");
+  router.push("/admin/bookmanagelist/createbook");
 };
 
 const goToEdit = (bookNumberInfo: string) => {
-  router.push(`/admin/booklist/editbook/${bookNumberInfo}`);
+  router.push(`/admin/bookmanagelist/editbook/${bookNumberInfo}`);
 };
 
 const goToDetail = (bookNumberInfo: string) => {
   router.push({
-    path: `/admin/booklist/detail/${bookNumberInfo}`,
+    path: `/admin/bookmanagelist/detail/${bookNumberInfo}`,
     query: { title: searchTitle.value },
   });
 };
@@ -100,7 +100,6 @@ onMounted(() => {
   }
 });
 
-
 const searchBooks = async () => {
   if (!searchTitle.value.trim()) {
     errorMessage.value = "タイトルを入力してください";
@@ -111,7 +110,9 @@ const searchBooks = async () => {
 
   errorMessage.value = "";
   try {
-    const response = await axios.get(`http://localhost:8099/booklist?title=${searchTitle.value}`);
+    const response = await axios.get(
+      `http://localhost:8099/bookmanagelist?title=${searchTitle.value}`,
+    );
     books.value = response.data;
     searchPerformed.value = true;
   } catch (error) {
@@ -133,5 +134,4 @@ const deleteBook = async (bookNumberInfo: string) => {
     }
   }
 };
-
 </script>

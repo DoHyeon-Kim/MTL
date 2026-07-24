@@ -130,7 +130,7 @@ const submitForm = async () => {
       "Content-Type": "multipart/form-data",
     },
   });
-  router.push("/admin/booklist");
+  router.push("/admin/bookmanagelist");
 };
 </script>
 

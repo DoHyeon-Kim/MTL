@@ -11,19 +11,19 @@ export const managementRoutes: RouteRecordRaw[] = [
         component: () => import("@/views/Admin/AdminHomeView.vue"),
       },
       {
-        path: "booklist",
+        path: "bookmanagelist",
         component: () => import("@/views/Admin/BookList.vue"),
       },
       {
-        path: "booklist/createbook",
+        path: "bookmanagelist/createbook",
         component: () => import("@/views/Admin/CreateBook.vue"),
       },
       {
-        path: "booklist/detail/:id",
+        path: "bookmanagelist/detail/:id",
         component: () => import("@/views/Admin/DetailBook.vue"),
       },
       {
-        path: "booklist/editbook/:id",
+        path: "bookmanagelist/editbook/:id",
         component: () => import("@/views/Admin/EditBook.vue"),
       },
       {

@@ -4,7 +4,7 @@ export default [
     component: () => import("@/views/loan/LoanList.vue"),
     meta: {
       showMainHeader: true,
-      sidebarType: null,
+      sidebarType: "mypage",
       showMainFooter: true,
     },
   },

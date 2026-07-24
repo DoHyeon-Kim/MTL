@@ -1,7 +1,9 @@
 <script setup lang="ts">
 import { ref, onMounted } from "vue";
-import { useRoute, useRouter } from "vue-router";
+import { useRouter } from "vue-router";
 import axios from "axios";
+import { useAuthStore } from "@/stores/auth";
+const auth = useAuthStore();
 
 interface CartItem {
   bookNumber: number;
@@ -12,8 +14,9 @@ interface CartItem {
 }
 
 const router = useRouter();
-const route = useRoute();
-const memberNo = route.params.memberNo;
+
+const memberNo = auth.memberNo;
+
 const PLACEHOLDER_IMAGE: string = "/images/books-media/list-view/book-media-01.jpg";
 
 const carts = ref<CartItem[]>([]);

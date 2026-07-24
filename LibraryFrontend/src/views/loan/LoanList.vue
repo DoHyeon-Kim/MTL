@@ -1,7 +1,7 @@
 <script setup lang="ts">
 import { computed, ref, onMounted } from "vue";
-import { useRoute } from "vue-router";
 import axios from "axios";
+import { useAuthStore } from "@/stores/auth";
 
 interface LoanList {
   loanNo: number;
@@ -16,8 +16,8 @@ interface LoanList {
   requestState: number;
 }
 
-const route = useRoute();
-const memberNo = Number(route.params.memberNo);
+const auth = useAuthStore();
+const memberNo = auth.memberNo;
 const PLACEHOLDER_IMAGE: string = "/images/books-media/list-view/book-media-01.jpg";
 
 const loans = ref<LoanList[]>([]);

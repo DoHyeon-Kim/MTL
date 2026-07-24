@@ -105,7 +105,7 @@ const handleImageSelect = (event: Event) => {
 
 const loadBook = async () => {
   try {
-    const res = await axios.get(`http://localhost:8099/bookdetail/${bookId}`);
+    const res = await axios.get(`http://localhost:8099/bookmanagedetail/${bookId}`);
     const data = res.data;
 
     form.bookImg = data.bookImg || "";
@@ -151,7 +151,7 @@ const submitForm = async () => {
         "Content-Type": "multipart/form-data",
       },
     });
-    router.replace(`/admin/booklist/detail/${bookId}`);
+    router.replace(`/admin/bookmanagelist/detail/${bookId}`);
   } catch (err) {
     console.error(err);
     errorMessage.value = "更新に失敗しました";

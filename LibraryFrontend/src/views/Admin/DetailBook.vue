@@ -105,7 +105,7 @@ const book = reactive({
 
 const fetchBook = async () => {
   try {
-    const res = await axios.get(`http://localhost:8099/bookdetail/${bookNumber}`);
+    const res = await axios.get(`http://localhost:8099/bookmanagedetail/${bookNumber}`);
     const data = res.data;
 
     book.bookImg = data.bookImg || data.imageUrl || data.image || "";
@@ -124,7 +124,7 @@ const fetchBook = async () => {
 };
 const fetchBookStock = async (infoNum: number | string) => {
   try {
-    const res = await axios.get(`http://localhost:8099/bookdetail/${infoNum}/stock`);
+    const res = await axios.get(`http://localhost:8099/bookmanagedetail/${infoNum}/stock`);
     const data = res.data;
 
     book.stockList = Array.isArray(data)
@@ -205,14 +205,14 @@ const deleteSelectedStocks = async () => {
 const goBack = () => {
   const prevTitle = route.query.title as string | undefined;
   if (prevTitle && prevTitle.trim()) {
-    router.push({ path: "/admin/booklist", query: { title: prevTitle } });
+    router.push({ path: "/admin/bookmanagelist", query: { title: prevTitle } });
   } else {
     router.back();
   }
 };
 
 const goToEdit = () => {
-  router.replace(`/admin/booklist/editbook/${bookNumber}`);
+  router.replace(`/admin/bookmanagelist/editbook/${bookNumber}`);
 };
 </script>
 

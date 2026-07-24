@@ -20,16 +20,12 @@ async function getData() {
 }
 
 async function searchData() {
-  const res = await axios.get<Book[]>(
-    `http://localhost:8099/booklist/search/${Search.value}`
-  );
+  const res = await axios.get<Book[]>(`http://localhost:8099/booklist/search/${Search.value}`);
   book.value = res.data;
 }
 
 const selectedCategory = computed(() => {
-  return typeof route.params.category === "string"
-    ? decodeURIComponent(route.params.category)
-    : "";
+  return typeof route.params.category === "string" ? decodeURIComponent(route.params.category) : "";
 });
 
 const filteredBooks = computed(() => {
@@ -37,7 +33,7 @@ const filteredBooks = computed(() => {
     return book.value;
   }
 
-  return book.value.filter(item => item.category === selectedCategory.value);
+  return book.value.filter((item) => item.category === selectedCategory.value);
 });
 
 watch(
@@ -45,7 +41,7 @@ watch(
   () => {
     Search.value = "";
     getData();
-  }
+  },
 );
 
 onMounted(() => {
@@ -56,12 +52,7 @@ onMounted(() => {
 <template>
   <div class="content">
     <div id="search">
-      <input
-        v-model="Search"
-        type="text"
-        placeholder="Please enter a search"
-        id="sinput"
-      />
+      <input v-model="Search" type="text" placeholder="Please enter a search" id="sinput" />
       <button @click="searchData">검색</button>
     </div>
 
