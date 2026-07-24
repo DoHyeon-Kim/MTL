@@ -10,7 +10,9 @@ const auth = useAuthStore();
 interface BookDetail {
   bookNumber: number;
   bookNumberInfo: number;
-  bookImg: string;
+  bookImg?: string;
+  imageUrl?: string;
+  image?: string;
   bookTitle: string;
   writer: string;
   publisher: string;
@@ -27,6 +29,10 @@ const bookNumberInfo = route.params.bookNumberInfo;
 const bookNumber = computed(
   () => book.value.find((b) => b.loanAvailable)?.bookNumber ?? book.value[0]?.bookNumber,
 );
+
+function getBookImage(bookItem: BookDetail) {
+  return bookItem.bookImg || bookItem.imageUrl || bookItem.image || "/images/no-image.svg";
+}
 
 async function DetailData() {
   const res = await axios.get<BookDetail[]>(`http://localhost:8099/bookdetail/${bookNumberInfo}`);
@@ -59,7 +65,7 @@ onMounted(() => {
 
     <div class="Detail-Top">
       <div class="book-image">
-        <img :src="`/book/${book[0].bookTitle}.jpg`" :alt="book[0].bookTitle" />
+        <img :src="getBookImage(book[0])" :alt="book[0].bookTitle" />
       </div>
 
       <div class="book-info">
@@ -126,5 +132,8 @@ onMounted(() => {
   line-height: 1.6;
   margin-bottom: 20px;
   font-size: 18px;
+  white-space: pre-wrap;
+  overflow-wrap: break-word;
+  word-break: keep-all;
 }
 </style>

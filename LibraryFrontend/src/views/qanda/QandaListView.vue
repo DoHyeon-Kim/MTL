@@ -24,7 +24,7 @@
           class="clickable-row"
           @click="goToDetail(item.id)"
         >
-          <td class="col-content">{{ item.title }}</td>
+          <td class="col-content">{{ item.content }}</td>
           <td class="col-status">
             <span class="status-badge" :class="item.status === '答え完了' ? 'done' : 'pending'">
               {{ item.status }}
@@ -38,39 +38,39 @@
 </template>
 
 <script setup lang="ts">
-import { onMounted, ref } from 'vue'
-import { RouterLink, useRouter } from 'vue-router'
-import { qandaApi, type Qanda } from '@/api/qandaApi'
+import { onMounted, ref } from "vue";
+import { RouterLink, useRouter } from "vue-router";
+import { qandaApi, type Qanda } from "@/api/qandaApi";
 
-const router = useRouter()
+const router = useRouter();
 
-const qandaList = ref<Qanda[]>([])
-const loading = ref(true)
-const errorMessage = ref('')
+const qandaList = ref<Qanda[]>([]);
+const loading = ref(true);
+const errorMessage = ref("");
 
 function formatDate(value: string): string {
-  if (!value) return ''
-  return value.slice(0, 10)
+  if (!value) return "";
+  return value.slice(0, 10);
 }
 
 function goToDetail(id: number) {
-  router.push({ name: 'qanda-detail', params: { id } })
+  router.push({ name: "qanda-detail", params: { id } });
 }
 
 async function fetchQandaList() {
-  loading.value = true
-  errorMessage.value = ''
+  loading.value = true;
+  errorMessage.value = "";
   try {
-    qandaList.value = await qandaApi.list()
+    qandaList.value = await qandaApi.list();
   } catch (e) {
-    errorMessage.value = 'Q&Aの取得に失敗しました。バックエンドが起動しているか確認してください。'
-    console.error(e)
+    errorMessage.value = "Q&Aの取得に失敗しました。バックエンドが起動しているか確認してください。";
+    console.error(e);
   } finally {
-    loading.value = false
+    loading.value = false;
   }
 }
 
-onMounted(fetchQandaList)
+onMounted(fetchQandaList);
 </script>
 
 <style scoped>

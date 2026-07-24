@@ -277,6 +277,9 @@ const goToEdit = () => {
   background: #f8fafc;
   padding: 12px;
   border-radius: 6px;
+  white-space: pre-wrap;
+  overflow-wrap: break-word;
+  word-break: keep-all;
 }
 .stock-section {
   margin-top: 24px;

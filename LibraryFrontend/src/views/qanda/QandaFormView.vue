@@ -21,7 +21,7 @@
         <div class="action-row">
           <RouterLink class="btn-catalog" :to="{ name: 'qanda-list' }">目録</RouterLink>
           <button class="btn-submit" type="submit" :disabled="submitting">
-            {{ submitting ? '送信中...' : '質問を送信する' }}
+            {{ submitting ? "送信中..." : "質問を送信する" }}
           </button>
         </div>
       </form>
@@ -52,7 +52,7 @@
             <textarea v-model="answerText" rows="4" required></textarea>
           </label>
           <button class="btn-submit small" type="submit" :disabled="submitting">
-            {{ submitting ? '送信中...' : '回答する' }}
+            {{ submitting ? "送信中..." : "回答する" }}
           </button>
         </form>
 
@@ -65,70 +65,83 @@
 </template>
 
 <script setup lang="ts">
-import { computed, onMounted, reactive, ref } from 'vue'
-import { RouterLink, useRoute, useRouter } from 'vue-router'
-import { qandaApi, type Qanda } from '@/api/qandaApi'
+import { computed, onMounted, reactive, ref, watch } from "vue";
+import { RouterLink, useRoute, useRouter } from "vue-router";
+import { qandaApi, type Qanda } from "@/api/qandaApi";
 
-const route = useRoute()
-const router = useRouter()
+const route = useRoute();
+const router = useRouter();
 
-const isDetail = computed(() => route.name === 'qanda-detail')
+const isDetail = computed(() => route.name === "qanda-detail");
 
-const qanda = ref<Qanda | null>(null)
-const newQuestion = reactive({ title: '', content: '' })
-const answerText = ref('')
+const qanda = ref<Qanda | null>(null);
+const newQuestion = reactive({ title: "", content: "" });
+const answerText = ref("");
 
-const loading = ref(false)
-const submitting = ref(false)
-const errorMessage = ref('')
+const loading = ref(false);
+const submitting = ref(false);
+const errorMessage = ref("");
 
 async function fetchQanda() {
-  if (!isDetail.value) return
-  loading.value = true
-  errorMessage.value = ''
+  if (!isDetail.value) return;
+  loading.value = true;
+  errorMessage.value = "";
   try {
-    qanda.value = await qandaApi.get(route.params.id as string)
+    qanda.value = await qandaApi.get(route.params.id as string);
   } catch (e) {
-    errorMessage.value = 'Q&Aの取得に失敗しました。'
-    console.error(e)
+    errorMessage.value = "Q&Aの取得に失敗しました。";
+    console.error(e);
   } finally {
-    loading.value = false
+    loading.value = false;
   }
 }
 
 async function onCreate() {
-  submitting.value = true
-  errorMessage.value = ''
+  submitting.value = true;
+  errorMessage.value = "";
   try {
-    const created = await qandaApi.create({ title: newQuestion.title, content: newQuestion.content })
-    newQuestion.title = ''
-    newQuestion.content = ''
-    // 作成した質問の詳細ページに遷移
-    router.push({ name: 'qanda-detail', params: { id: created.id } })
+    const created = await qandaApi.create({
+      title: newQuestion.title,
+      content: newQuestion.content,
+    });
+    newQuestion.title = "";
+    newQuestion.content = "";
+    qanda.value = created;
+    await router.push({ name: "qanda-detail", params: { id: created.id } });
   } catch (e) {
-    errorMessage.value = '質問の送信に失敗しました。'
-    console.error(e)
+    errorMessage.value = "質問の送信に失敗しました。";
+    console.error(e);
   } finally {
-    submitting.value = false
+    submitting.value = false;
   }
 }
 
 async function onAnswer() {
-  if (!qanda.value) return
-  submitting.value = true
-  errorMessage.value = ''
+  if (!qanda.value) return;
+  submitting.value = true;
+  errorMessage.value = "";
   try {
-    qanda.value = await qandaApi.answer(qanda.value.id, answerText.value)
-    answerText.value = ''
+    qanda.value = await qandaApi.answer(qanda.value.id, answerText.value);
+    answerText.value = "";
   } catch (e) {
-    errorMessage.value = '回答の送信に失敗しました。'
-    console.error(e)
+    errorMessage.value = "回答の送信に失敗しました。";
+    console.error(e);
   } finally {
-    submitting.value = false
+    submitting.value = false;
   }
 }
 
-onMounted(fetchQanda)
+watch(
+  () => route.params.id,
+  (newId) => {
+    if (newId) {
+      fetchQanda();
+    }
+  },
+  { immediate: true },
+);
+
+onMounted(fetchQanda);
 </script>
 
 <style scoped>

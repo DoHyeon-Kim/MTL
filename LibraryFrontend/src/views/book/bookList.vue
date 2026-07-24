@@ -8,6 +8,9 @@ interface Book {
   bookNumberInfo: number;
   bookTitle: string;
   category: string;
+  bookImg?: string;
+  imageUrl?: string;
+  image?: string;
 }
 
 const route = useRoute();
@@ -27,6 +30,10 @@ async function searchData() {
 const selectedCategory = computed(() => {
   return typeof route.params.category === "string" ? decodeURIComponent(route.params.category) : "";
 });
+
+function getBookImage(bookItem: Book) {
+  return bookItem.bookImg || bookItem.imageUrl || bookItem.image || "/images/no-image.svg";
+}
 
 const filteredBooks = computed(() => {
   if (!selectedCategory.value) {
@@ -64,7 +71,7 @@ onMounted(() => {
       <div id="book" v-for="bookNo in filteredBooks" :key="bookNo.bookNumber">
         <img
           @click="$router.push({ path: `/bookdetail/${bookNo.bookNumberInfo}` })"
-          :src="`/book/${bookNo.bookTitle}.jpg`"
+          :src="getBookImage(bookNo)"
           :alt="bookNo.bookTitle"
         />
         <p>{{ bookNo.bookTitle }}</p>
