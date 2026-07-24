@@ -19,14 +19,29 @@ interface LoanList {
 const loans = ref<LoanList[]>([]);
 const userId = ref("");
 
-async function getLoanData(memberNo: number) {
+async function changeloanstate(loanNo: number, state: number) {
   try {
-    const res = await axios.get<LoanList[]>(`http://localhost:8099/member/loans/${memberNo}`, {
-      params: { state: 1 },
-    });
+    await axios.put(
+      `http://localhost:8099/member/loans/${loanNo}`,
+      null,
+      { params: { state } }
+    );
+    await getLoanData(userId.value);
+  } catch (error) {
+    console.error("貸出状態の変更に失敗しました:", error);
+    alert("貸出状態の変更に失敗しました");
+  }
+}
+
+async function getLoanData(memberId: string) {
+  try {
+    const res = await axios.get<LoanList[]>("http://localhost:8099/member/loan", {
+  params: { memberId },
+});
     loans.value = res.data;
   } catch (error) {
     console.error("貸出一覧の取得に失敗しました:", error);
+    alert("貸出一覧の取得に失敗しました");
   }
 }
 </script>
@@ -42,13 +57,14 @@ async function getLoanData(memberNo: number) {
               v-model="userId"
               type="text"
               placeholder="会員番号"
-              @keyup.enter="getLoanData(Number(userId))"
+              @keyup.enter="getLoanData(String(userId))"
             />
           </div>
 
           <table class="table shop_table">
             <thead>
               <tr>
+                <th>種類</th>
                 <th>メンバーID</th>
                 <th>本</th>
                 <th>期間</th>
@@ -58,6 +74,12 @@ async function getLoanData(memberNo: number) {
 
             <tbody>
               <tr v-for="item in loans" :key="item.loanNo">
+
+                <td>
+                  <span v-if="item.requestState === 1">貸出申請</span>
+                  <span v-else-if="item.requestState === 2">貸出中</span>
+                  <span v-else-if="item.requestState === 3">延長申請</span>
+                </td>
                 <td class="product-name">
                   <span class="book-cover"> </span>
                   <span class="product-detail">
@@ -74,7 +96,10 @@ async function getLoanData(memberNo: number) {
                 <td>{{ item.dueDate }}</td>
 
                 <td>
-                  <button></button>
+                  <button v-if="item.requestState === 1" @click="changeloanstate(item.loanNo, 2)">承認</button>
+                  <button v-else-if="item.requestState === 2" @click="changeloanstate(item.loanNo, 4)">返却</button>
+                  <button v-else-if="item.requestState === 3" @click="changeloanstate(item.loanNo, 3)">延長申請</button>
+                  <button v-else>error</button>
                 </td>
               </tr>
             </tbody>
@@ -85,17 +110,3 @@ async function getLoanData(memberNo: number) {
   </div>
 </template>
 
-<style>
-.cart-header {
-  display: flex;
-  justify-content: space-between;
-  align-items: center;
-}
-
-.book-cover img {
-  width: 80px;
-  height: 100px;
-  object-fit: cover;
-  border: 1px solid #000000;
-}
-</style>

@@ -22,9 +22,14 @@ public class LoanController {
 	private final LoanService loanservice;
 	//一般顧客用DB照会
 	@GetMapping("/member/loans/{memberNo}")
-	public List<LoanDTO> getLoanList(@PathVariable("memberNo") int memberNo,
-	                                 @RequestParam(name = "state", required = false) Integer state) {
-	    return loanservice.getLoanList(memberNo, state);
+	public List<LoanDTO> getLoanList(@PathVariable("memberNo") int memberNo) {
+	    return loanservice.getLoanList(memberNo);
+	}
+	
+	//管理者
+	@GetMapping("/member/loan")
+	public List<LoanDTO> getLoanListAdmin(@RequestParam("memberId") String memberId) {
+	    return loanservice.getLoanListAdmin(memberId);
 	}
 	
 	//予約処理
@@ -39,4 +44,6 @@ public class LoanController {
             @RequestParam(name = "state", required = false) Integer state) {
 		loanservice.ChangeStatement(loanNo,state);
 	}
+	
+	
 }

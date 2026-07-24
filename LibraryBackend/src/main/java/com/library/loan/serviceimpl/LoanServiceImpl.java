@@ -16,10 +16,16 @@ public class LoanServiceImpl implements LoanService{
 	private final LoanMapper loanMapper;
 	
 	@Override
-	public List<LoanDTO> getLoanList(int memberNo, Integer state) {
-		if(state ==1) return loanMapper.selectLoanList2(memberNo, state);
-		else return loanMapper.selectLoanList(memberNo, state);
+	public List<LoanDTO> getLoanList(int memberNo) {
+		return loanMapper.selectLoanListMember(memberNo);   // user page check
+	
 
+	}
+	
+	@Override
+	public List<LoanDTO> getLoanListAdmin(String memberId)
+	{
+		return loanMapper.selectLoanListAdmin(memberId);
 	}
 	
 	@Override
@@ -48,7 +54,8 @@ public class LoanServiceImpl implements LoanService{
 		case 1: //추가되었으므로 문제 없음
 			break; 
 		case 2:
-			loanMapper.changeState(loanNo); // 여긴 날짜 넣는 시스템
+			System.out.println("2");
+			loanMapper.checkLoan(loanNo); // 여긴 날짜 넣는 시스템
 			break;
 		case 3:
 			loanMapper.extensionLoan(loanNo); // 날짜 연장 해주는 시스템
@@ -57,7 +64,10 @@ public class LoanServiceImpl implements LoanService{
 			loanMapper.returnLoan(loanNo); // 반납일 기록.
 			break;
 		case 5:
-			loanMapper.extensionLoan(loanNo);
+			loanMapper.changeState(loanNo);
+			break;
+		default :
+			System.out.println("de");
 			break;
 		}
 	}
